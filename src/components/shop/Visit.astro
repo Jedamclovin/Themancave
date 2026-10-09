@@ -22,6 +22,7 @@ const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/$
 								data-day={row.day}
 								data-open={row.open ?? ""}
 								data-close={row.close ?? ""}
+								data-note={row.note ?? ""}
 								class="border-border data-today:text-primary-accent border-b"
 							>
 								<th scope="row" class="py-3.5 text-left font-medium">
@@ -81,8 +82,9 @@ const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/$
 		row.setAttribute("data-today", "");
 		const label = document.querySelector("[data-today-hours]");
 		if (label) {
+			const note = row.dataset.note ? ` (${row.dataset.note.toLowerCase()})` : "";
 			label.textContent = row.dataset.open
-				? `Open today, ${row.dataset.open} to ${row.dataset.close}.`
+				? `Open today, ${row.dataset.open} to ${row.dataset.close}${note}.`
 				: "Closed today.";
 		}
 	}

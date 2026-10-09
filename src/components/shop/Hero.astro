@@ -1,8 +1,11 @@
 ---
 import { Image } from "astro:assets";
 import { Button } from "@/components/starwind/button";
-import { shop } from "@/data/shop";
+import { hours, shop } from "@/data/shop";
 import hero from "@/assets/demo-1/hero.jpg";
+
+// Shown until the script in Visit.astro swaps in today's hours
+const openDays = hours.filter((row) => row.open);
 ---
 
 <section class="relative isolate flex min-h-svh flex-col justify-end overflow-hidden">
@@ -33,7 +36,7 @@ import hero from "@/assets/demo-1/hero.jpg";
 			</a>
 		</div>
 		<p class="border-border text-muted-foreground mt-12 border-t pt-5 text-sm md:mt-16">
-			<span data-today-hours>Open Tuesday to Saturday.</span>{" "}
+			<span data-today-hours>Open {openDays[0].day} to {openDays[openDays.length - 1].day}.</span>{" "}
 			{shop.town}. Walk-ins welcome.
 		</p>
 	</div>
