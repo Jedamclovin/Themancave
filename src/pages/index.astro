@@ -1,0 +1,28 @@
+---
+import "@/styles/starwind.css";
+import { Button } from "@/components/starwind/button";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Theme test page for the barber shop base." />
+		<meta name="generator" content={Astro.generator} />
+		<title>Barber base theme test</title>
+	</head>
+	<body>
+		<main class="mx-auto flex min-h-svh max-w-6xl flex-col justify-end px-6 pt-24 pb-12 md:px-12 md:pb-24">
+			<h1 class="text-6xl md:text-8xl lg:text-9xl">Sharp cuts, straight razors</h1>
+			<p class="mt-6 max-w-[52ch] text-lg text-pretty md:mt-8 md:text-xl">
+				This page tests the shop theme. The background, text, accent colour and both fonts come from
+				the tokens in src/styles/starwind.css, so changing them there restyles every page.
+			</p>
+			<div class="mt-8 md:mt-10">
+				<Button variant="primary" size="lg" href="#">Book an appointment</Button>
+			</div>
+		</main>
+	</body>
+</html>
