@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import { Button } from "@/components/starwind/button";
+import { barbers } from "@/data/shop";
+import scissors from "@/assets/demo-1/scissors-1.jpg";
+import fade from "@/assets/demo-1/fade-1.jpg";
+import towel from "@/assets/demo-1/towel-1.jpg";
+
+const photos = {
+	scissors: { src: scissors, alt: "A barber cutting hair with scissors over a comb" },
+	fade: { src: fade, alt: "Clippers blending a fade behind the ear" },
+	towel: { src: towel, alt: "A hot towel held over a customer's eyes during a straight razor shave" },
+};
+---
+
+<section id="barbers" class="mx-auto max-w-6xl px-6 py-20 md:px-12 md:py-32">
+	<h2 class="text-4xl md:text-6xl">The barbers</h2>
+	<p class="text-muted-foreground mt-4 max-w-[52ch] text-lg">
+		Pick whoever suits the job, or book the first free chair.
+	</p>
+
+	<ul class="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 md:mt-16 lg:grid-cols-3">
+		{
+			barbers.map((barber) => (
+				<li class="flex flex-col">
+					<Image
+						src={photos[barber.photo].src}
+						alt={photos[barber.photo].alt}
+						widths={[400, 600, 900]}
+						sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+						class="aspect-4/5 w-full rounded-md object-cover"
+					/>
+					<h3 class="mt-6 text-3xl">{barber.name}</h3>
+					<p class="text-primary-accent mt-2">{barber.role}</p>
+					<p class="text-muted-foreground mt-3 grow">
+						{barber.speciality} {barber.detail}
+					</p>
+					<div class="mt-6">
+						<Button variant="secondary" size="md" href="#book">
+							Book with {barber.firstName}
+						</Button>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</section>

@@ -1,0 +1,20 @@
+---
+import { shop } from "@/data/shop";
+---
+
+<footer class="border-border border-t">
+	<div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-12 md:py-16">
+		<div>
+			<p class="font-display text-3xl tracking-tight">{shop.name}</p>
+			<p class="text-muted-foreground mt-2">{shop.strapline}</p>
+			<p class="mt-4">
+				{shop.town}.{" "}
+				<a href={shop.phoneHref} class="hover:text-primary-accent transition-colors">{shop.phone}</a>
+			</p>
+		</div>
+		<div class="text-muted-foreground text-sm md:text-right">
+			<p>{shop.footerNote}</p>
+			<p class="mt-1">Photos from Unsplash.</p>
+		</div>
+	</div>
+</footer>

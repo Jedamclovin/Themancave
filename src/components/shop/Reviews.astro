@@ -1,0 +1,32 @@
+---
+import { reviews } from "@/data/shop";
+
+const [lead, ...rest] = reviews;
+---
+
+<section id="reviews" class="bg-secondary text-secondary-foreground">
+	<div class="mx-auto max-w-6xl px-6 py-20 md:px-12 md:py-32">
+		<h2 class="sr-only">What customers say</h2>
+		<figure>
+			<blockquote class="font-display max-w-[22ch] text-4xl leading-[1.1] text-balance md:text-6xl lg:text-7xl">
+				“{lead.quote}”
+			</blockquote>
+			<figcaption class="mt-6 text-lg">{lead.name}</figcaption>
+		</figure>
+
+		<ul class="border-secondary-foreground/25 mt-14 grid gap-x-12 gap-y-10 border-t pt-10 sm:grid-cols-2 md:mt-20 md:pt-14">
+			{
+				rest.map((review) => (
+					<li>
+						<figure>
+							<blockquote class="font-display text-2xl leading-snug text-pretty md:text-3xl">
+								“{review.quote}”
+							</blockquote>
+							<figcaption class="mt-3 opacity-80">{review.name}</figcaption>
+						</figure>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>

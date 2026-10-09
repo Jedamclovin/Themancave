@@ -1,0 +1,89 @@
+---
+import { Button } from "@/components/starwind/button";
+import { hours, shop } from "@/data/shop";
+
+const { lat, lon } = shop.map;
+const bbox = [lon - 0.012, lat - 0.006, lon + 0.012, lat + 0.006].map((n) => n.toFixed(4)).join(",");
+const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
+const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;
+---
+
+<section id="visit" class="mx-auto max-w-6xl px-6 py-20 md:px-12 md:py-32">
+	<h2 class="text-4xl md:text-6xl">Hours and location</h2>
+
+	<div class="mt-12 grid gap-12 md:mt-16 lg:grid-cols-2 lg:gap-16">
+		<div>
+			<table class="w-full text-lg">
+				<caption class="sr-only">Opening hours</caption>
+				<tbody>
+					{
+						hours.map((row) => (
+							<tr
+								data-day={row.day}
+								data-open={row.open ?? ""}
+								data-close={row.close ?? ""}
+								class="border-border data-today:text-primary-accent border-b"
+							>
+								<th scope="row" class="py-3.5 text-left font-medium">
+									{row.day}
+									{row.note && (
+										<span class="text-muted-foreground ml-2 text-sm font-normal">{row.note}</span>
+									)}
+								</th>
+								<td class="py-3.5 text-right tabular-nums">
+									{row.open ? `${row.open} to ${row.close}` : "Closed"}
+								</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+			<p class="text-muted-foreground mt-6">{shop.parking}</p>
+
+			<div id="book" class="mt-12 scroll-mt-8">
+				<h3 class="text-3xl">Book a chair</h3>
+				<p class="text-muted-foreground mt-3 max-w-[46ch]">
+					Call the shop and we'll find you a slot, or walk in and take the first free chair.
+				</p>
+				<div class="mt-6">
+					<Button variant="primary" size="lg" href={shop.phoneHref}>Call {shop.phone}</Button>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="border-border overflow-hidden rounded-md border">
+				<iframe
+					src={mapSrc}
+					title={`Map showing ${shop.name} in ${shop.town}`}
+					loading="lazy"
+					class="block aspect-4/3 w-full contrast-90 grayscale invert-[0.92] lg:aspect-auto lg:h-[30rem]"
+				></iframe>
+			</div>
+			<p class="mt-4">
+				{shop.town}.{" "}
+				<a
+					href={mapLink}
+					class="decoration-primary hover:text-primary-accent underline decoration-1 underline-offset-4 transition-colors"
+				>
+					Open the map
+				</a>
+			</p>
+		</div>
+	</div>
+</section>
+
+<script is:inline define:vars={{ timeZone: shop.timeZone }}>
+	// Highlight today's row and show today's hours in the hero
+	const today = new Intl.DateTimeFormat("en-GB", { weekday: "long", timeZone }).format(new Date());
+	const row = document.querySelector(`tr[data-day="${today}"]`);
+	if (row) {
+		row.setAttribute("data-today", "");
+		const label = document.querySelector("[data-today-hours]");
+		if (label) {
+			label.textContent = row.dataset.open
+				? `Open today, ${row.dataset.open} to ${row.dataset.close}.`
+				: "Closed today.";
+		}
+	}
+</script>
