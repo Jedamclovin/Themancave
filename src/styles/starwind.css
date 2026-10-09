@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/oswald";
+@import "@fontsource-variable/playfair-display";
 @import "@fontsource-variable/manrope";
 @plugin "@tailwindcss/forms";
 @custom-variant dark (&:where(.dark, .dark *));
@@ -84,17 +84,18 @@
 }
 
 :root {
-  /* Palette: near black, off white, one accent */
-  --ink: #0f0e0c;
-  --char: #1b1916;
-  --char-raised: #2a2722;
-  --bone: #ebe6da;
-  --smoke: #a39c8e;
-  --brass: #b5925a;
-  --brass-light: #cdae7a;
+  /* Palette (Hartwell & Vane): near black, cream, brass and oxblood */
+  --ink: #141110;
+  --char: #1f1a18;
+  --char-raised: #2b2422;
+  --bone: #ede6da;
+  --smoke: #a69d8f;
+  --brass: #b08d57;
+  --brass-light: #c9a974;
+  --oxblood: #6e1f1f;
 
-  /* Fonts: one condensed display face, one body face */
-  --font-heading: "Oswald Variable", "Arial Narrow", sans-serif;
+  /* Fonts: one serif display face, one body face */
+  --font-heading: "Playfair Display Variable", Georgia, serif;
   --font-body: "Manrope Variable", system-ui, sans-serif;
 
   --background: var(--ink);
@@ -106,7 +107,7 @@
   --primary: var(--brass);
   --primary-foreground: var(--ink);
   --primary-accent: var(--brass-light);
-  --secondary: var(--char-raised);
+  --secondary: var(--oxblood);
   --secondary-foreground: var(--bone);
   --secondary-accent: var(--bone);
   --muted: var(--char);
@@ -150,7 +151,7 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-medium uppercase leading-none tracking-tight text-balance;
+    @apply font-display font-medium leading-[1.05] tracking-tight text-balance;
   }
   button {
     @apply cursor-pointer;
