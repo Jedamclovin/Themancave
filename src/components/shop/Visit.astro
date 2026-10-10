@@ -1,75 +1,106 @@
 ---
-import { Button } from "@/components/starwind/button";
-import { hours, shop } from "@/data/shop";
+import Cta from "./Cta.astro";
+import Ornament from "./Ornament.astro";
+import SectionHead from "./SectionHead.astro";
+import { copy, hours, shop } from "@/data/shop";
 
 const { lat, lon } = shop.map;
-const bbox = [lon - 0.012, lat - 0.006, lon + 0.012, lat + 0.006].map((n) => n.toFixed(4)).join(",");
+const bbox = [lon - 0.02, lat - 0.01, lon + 0.02, lat + 0.01].map((n) => n.toFixed(4)).join(",");
 const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
 const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;
+
+const screws = ["top-2.5 left-2.5", "top-2.5 right-2.5", "bottom-2.5 left-2.5", "bottom-2.5 right-2.5"];
 ---
 
-<section id="visit" class="mx-auto max-w-6xl px-6 py-20 md:px-12 md:py-32">
-	<h2 class="text-4xl md:text-6xl">Hours and location</h2>
+<section id="visit" class="defer-render overflow-x-clip px-5 pt-24 pb-24 md:px-10 lg:pt-40 lg:pb-40">
+	<SectionHead number="05" title={copy.visit.title} />
 
-	<div class="mt-12 grid gap-12 md:mt-16 lg:grid-cols-2 lg:gap-16">
-		<div>
-			<table class="w-full text-lg">
-				<caption class="sr-only">Opening hours</caption>
-				<tbody>
+	<div class="mt-14 lg:mt-20 lg:grid lg:grid-cols-12 lg:gap-x-8">
+		<!-- The hours, as an enamel door sign -->
+		<div class="relative z-10 lg:col-start-1 lg:col-end-7">
+			<div class="bg-secondary text-secondary-foreground rounded-lg p-2">
+				<div class="border-secondary-foreground/85 relative rounded-sm border-2 px-3 pt-11 pb-9 sm:px-8">
 					{
-						hours.map((row) => (
-							<tr
-								data-day={row.day}
-								data-open={row.open ?? ""}
-								data-close={row.close ?? ""}
-								data-note={row.note ?? ""}
-								class="border-border data-today:text-primary-accent border-b"
-							>
-								<th scope="row" class="py-3.5 text-left font-medium">
-									{row.day}
-									{row.note && (
-										<span class="text-muted-foreground ml-2 text-sm font-normal">{row.note}</span>
-									)}
-								</th>
-								<td class="py-3.5 text-right tabular-nums">
-									{row.open ? `${row.open} to ${row.close}` : "Closed"}
-								</td>
-							</tr>
+						screws.map((position) => (
+							<span
+								aria-hidden="true"
+								class:list={["bg-background/70 absolute size-2 rounded-full", position]}
+							/>
 						))
 					}
-				</tbody>
-			</table>
-			<p class="text-muted-foreground mt-6">{shop.parking}</p>
-
-			<div id="book" class="mt-12 scroll-mt-8">
-				<h3 class="text-3xl">Book a chair</h3>
-				<p class="text-muted-foreground mt-3 max-w-[46ch]">
-					Call the shop and we'll find you a slot, or walk in and take the first free chair.
-				</p>
-				<div class="mt-6">
-					<Button variant="primary" size="lg" href={shop.phoneHref}>Call {shop.phone}</Button>
+					<p class="font-display text-center text-[2.5rem] leading-none md:text-5xl">{copy.visit.signTitle}</p>
+					<Ornament class="mx-auto mt-5 w-40" />
+					<table class="mt-6 w-full border-separate border-spacing-0">
+						<caption class="sr-only">{copy.visit.signTitle}</caption>
+						<tbody>
+							{
+								hours.map((row) => (
+									<tr
+										data-day={row.day}
+										data-open={row.open ?? ""}
+										data-close={row.close ?? ""}
+										data-note={row.note ?? ""}
+										class="group data-today:text-secondary"
+									>
+										<th
+											scope="row"
+											class="font-display group-data-today:bg-secondary-foreground py-2 pl-3 text-left text-2xl font-normal md:text-[1.75rem]"
+										>
+											{row.day}
+											<span class="label ml-2 hidden align-middle group-data-today:inline">
+												{copy.visit.today}
+											</span>
+											{row.note && (
+												<span class="label ml-2 align-middle max-sm:block max-sm:ml-0 max-sm:mt-1">
+													{row.note}
+												</span>
+											)}
+										</th>
+										<td
+											class:list={[
+												// The 1px spread covers a hairline seam between the two cells at fractional widths
+												"font-display group-data-today:bg-secondary-foreground group-data-today:shadow-[-1px_0_0_0_var(--secondary-foreground)] py-2 pr-3 text-right text-2xl whitespace-nowrap tabular-nums md:text-[1.75rem]",
+												!row.open && "italic",
+											]}
+										>
+											{row.open ? `${row.open} to ${row.close}` : copy.visit.closed}
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+					<p class="label mt-8 text-center">
+						{copy.visit.telephone} {shop.phone}
+					</p>
 				</div>
 			</div>
+			<p class="font-display mt-6 max-w-[26ch] text-xl leading-snug italic">{shop.parking}</p>
 		</div>
 
-		<div>
-			<div class="border-border overflow-hidden rounded-md border">
-				<iframe
-					src={mapSrc}
-					title={`Map showing ${shop.name} in ${shop.town}`}
-					loading="lazy"
-					class="block aspect-4/3 w-full contrast-90 grayscale invert-[0.92] lg:aspect-auto lg:h-[30rem]"
-				></iframe>
-			</div>
-			<p class="mt-4">
-				{shop.town}.{" "}
+		<!-- The map slides under the sign and runs off the right edge -->
+		<div class="mt-12 -mr-5 ml-[10%] md:-mr-10 lg:col-start-7 lg:col-end-13 lg:row-start-1 lg:mt-32 lg:-ml-32">
+			<iframe
+				src={mapSrc}
+				title={`Map showing ${shop.name} in ${shop.town}`}
+				loading="lazy"
+				class="block h-80 w-full contrast-90 grayscale invert-[0.92] lg:h-[36rem]"
+			></iframe>
+		</div>
+
+		<div id="book" class="mt-12 scroll-mt-8 lg:col-start-8 lg:col-end-13 lg:mt-14">
+			<h3 class="text-5xl md:text-6xl">{copy.book}</h3>
+			<p class="text-muted-foreground mt-5 max-w-[40ch] text-lg">{copy.visit.bookText}</p>
+			<div class="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
+				<Cta href={shop.phoneHref}>{`${copy.visit.ring} ${shop.phone}`}</Cta>
 				<a
 					href={mapLink}
-					class="decoration-primary hover:text-primary-accent underline decoration-1 underline-offset-4 transition-colors"
+					class="label border-primary hover:text-primary-accent border-b pt-3 pb-2 transition-colors"
 				>
-					Open the map
+					{copy.visit.openMap}
 				</a>
-			</p>
+			</div>
+			<p class="label text-muted-foreground mt-8">{shop.town}</p>
 		</div>
 	</div>
 </section>

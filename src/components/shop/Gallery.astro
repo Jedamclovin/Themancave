@@ -1,44 +1,40 @@
 ---
 import { Image } from "astro:assets";
-import interior1 from "@/assets/demo-1/interior-1.jpg";
-import interior2 from "@/assets/demo-1/interior-2.jpg";
-import chair1 from "@/assets/demo-1/chair-1.jpg";
-import shave1 from "@/assets/demo-1/shave-1.jpg";
-import shave2 from "@/assets/demo-1/shave-2.jpg";
-import beard1 from "@/assets/demo-1/beard-1.jpg";
-import towel2 from "@/assets/demo-1/towel-2.jpg";
-import pole1 from "@/assets/demo-1/pole-1.jpg";
-import pole2 from "@/assets/demo-1/pole-2.jpg";
+import SectionHead from "./SectionHead.astro";
+import { copy, gallery } from "@/data/shop";
 
-// Ordered so the columns end at about the same height at two and three columns
-const photos = [
-	{ src: interior1, alt: "A red leather barber chair in a dark wood-panelled room hung with framed pictures" },
-	{ src: pole1, alt: "A lit Gents Barbers sign and striped pole at night" },
-	{ src: shave1, alt: "A barber shaving a lathered customer with a straight razor" },
-	{ src: chair1, alt: "A brown buttoned leather barber chair seen from the front" },
-	{ src: beard1, alt: "A barber trimming a reclined customer's beard with clippers" },
-	{ src: interior2, alt: "A long, dimly lit barbershop with mirrors and a beamed ceiling" },
-	{ src: towel2, alt: "A barber's hands wrapping a hot towel around a customer's face" },
-	{ src: shave2, alt: "A customer leaning back for a razor shave in low light" },
-	{ src: pole2, alt: "A shaving brush beside a red, white and blue barber pole" },
+// Seven places on a 6 column grid (phones) and a 12 column grid (desktop).
+// Sizes are deliberately uneven, and the grid runs off the right edge of the screen.
+const places = [
+	"col-start-1 col-end-7 row-start-1 row-span-4 lg:col-end-8 lg:row-span-6",
+	"col-start-1 col-end-4 row-start-5 row-span-5 lg:col-start-8 lg:col-end-11 lg:row-start-2 lg:row-span-6",
+	"col-start-4 col-end-7 row-start-5 row-span-3 lg:col-start-11 lg:col-end-13 lg:row-start-1 lg:row-span-4",
+	"col-start-4 col-end-7 row-start-8 row-span-2 lg:col-start-3 lg:col-end-8 lg:row-start-7 lg:row-span-5",
+	"col-start-1 col-end-5 row-start-10 row-span-3 lg:col-start-11 lg:col-end-13 lg:row-start-5 lg:row-span-3",
+	"col-start-2 col-end-7 row-start-13 row-span-3 lg:col-start-8 lg:col-end-13 lg:row-start-8 lg:row-span-4",
+	"col-start-1 col-end-4 row-start-16 row-span-5 lg:col-end-3 lg:row-start-9 lg:row-span-4",
 ];
+const aside = "col-start-5 col-end-7 row-start-10 row-span-2 lg:col-start-1 lg:col-end-3 lg:row-start-7 lg:row-span-2";
 ---
 
-<section id="gallery" class="mx-auto max-w-6xl px-3 pb-20 sm:px-6 md:px-12 md:pb-32">
-	<h2 class="px-3 text-4xl sm:px-0 md:text-6xl">Inside the shop</h2>
-	<ul class="mt-10 columns-2 gap-3 md:mt-14 md:columns-3 md:gap-4">
+<section id="gallery" class="defer-render overflow-x-clip pb-28 lg:pb-44">
+	<SectionHead number="03" title={copy.gallery.title} class="px-5 md:px-10" />
+	<ul class="mt-12 grid auto-rows-[15vw] grid-cols-6 gap-2 pl-5 md:pl-10 lg:mt-16 lg:auto-rows-[5.6vw] lg:grid-cols-12 lg:gap-4">
 		{
-			photos.map((photo) => (
-				<li class="mb-3 break-inside-avoid md:mb-4">
+			gallery.slice(0, places.length).map((photo, i) => (
+				<li class={places[i]}>
 					<Image
 						src={photo.src}
 						alt={photo.alt}
-						widths={[300, 500, 800]}
-						sizes="(min-width: 768px) 30vw, 50vw"
-						class="w-full rounded-md"
+						widths={[320, 560, 900, 1300]}
+						sizes="(min-width: 1024px) 55vw, 92vw"
+						class="size-full object-cover"
 					/>
 				</li>
 			))
 		}
+		<li class:list={["font-display flex items-center text-2xl leading-none italic lg:items-end lg:text-4xl", aside]}>
+			{copy.gallery.aside}
+		</li>
 	</ul>
 </section>

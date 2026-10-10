@@ -1,0 +1,22 @@
+---
+// Fixed Book and Call bar on phones.
+import { copy, shop } from "@/data/shop";
+---
+
+<nav
+	aria-label="Book or call"
+	class="border-primary/50 fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t pb-[env(safe-area-inset-bottom)] md:hidden"
+>
+	<a
+		href="#book"
+		class="bg-primary text-primary-foreground flex h-14 items-center justify-center text-xs font-bold tracking-[0.2em] uppercase -outline-offset-4!"
+	>
+		{copy.bookShort}
+	</a>
+	<a
+		href={shop.phoneHref}
+		class="bg-secondary text-secondary-foreground flex h-14 items-center justify-center text-xs font-bold tracking-[0.2em] uppercase -outline-offset-4!"
+	>
+		{copy.callShort}
+	</a>
+</nav>

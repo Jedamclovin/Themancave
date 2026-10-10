@@ -1,0 +1,15 @@
+---
+// The one divider used across the site: a hairline rule with a small lozenge.
+// Takes its colour from the text colour.
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={["flex items-center gap-3", className]}>
+	<span class="h-px flex-1 bg-current opacity-50"></span>
+	<span class="size-1.5 rotate-45 bg-current"></span>
+	<span class="h-px flex-1 bg-current opacity-50"></span>
+</div>

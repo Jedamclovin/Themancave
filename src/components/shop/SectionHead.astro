@@ -1,0 +1,27 @@
+---
+// Section number in small tracked capitals, like a printed menu, above the title.
+interface Props {
+	number: string;
+	title: string;
+	tone?: "dark" | "paper";
+	size?: "lg" | "sm";
+	class?: string;
+}
+
+const { number, title, tone = "dark", size = "lg", class: className } = Astro.props;
+---
+
+<div class={className}>
+	<p class:list={["label flex items-center gap-4", tone === "paper" ? "text-secondary" : "text-primary"]}>
+		<span>No. {number}</span>
+		<span aria-hidden="true" class="h-px w-14 bg-current opacity-60"></span>
+	</p>
+	<h2
+		class:list={[
+			"mt-5",
+			size === "lg" ? "text-[clamp(3.5rem,10.5vw,9.5rem)] leading-[0.84]" : "text-5xl md:text-6xl",
+		]}
+	>
+		{title}
+	</h2>
+</div>

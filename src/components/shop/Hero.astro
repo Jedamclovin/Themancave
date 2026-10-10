@@ -1,43 +1,71 @@
 ---
 import { Image } from "astro:assets";
-import { Button } from "@/components/starwind/button";
-import { hours, shop } from "@/data/shop";
-import hero from "@/assets/demo-1/hero.jpg";
+import Cta from "./Cta.astro";
+import Seal from "./Seal.astro";
+import { copy, hours, photos, shop } from "@/data/shop";
 
 // Shown until the script in Visit.astro swaps in today's hours
 const openDays = hours.filter((row) => row.open);
 ---
 
-<section class="relative isolate flex min-h-svh flex-col justify-end overflow-hidden">
-	<Image
-		src={hero}
-		alt="Three leather barber chairs facing mirrors on a brick wall, lit by warm pendant lamps"
-		widths={[640, 960, 1440, 1920, 2400]}
-		sizes="100vw"
-		loading="eager"
-		fetchpriority="high"
-		class="motion-safe:animate-settle absolute inset-0 -z-20 size-full object-cover"
-	/>
-	<div class="from-background via-background/70 to-background/30 absolute inset-0 -z-10 bg-linear-to-t"></div>
+<section class="relative overflow-x-clip px-5 pt-7 pb-20 md:px-10 md:pt-10 lg:pb-32">
+	<p class="label text-primary">{shop.strapline}</p>
 
-	<div class="mx-auto w-full max-w-6xl px-6 pt-32 pb-10 md:px-12 md:pb-16">
-		<h1 class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">{shop.name}</h1>
-		<p class="text-primary-accent mt-4 text-lg md:mt-5 md:text-xl">{shop.strapline}</p>
-		<p class="font-display mt-6 max-w-[24ch] text-2xl italic text-pretty md:mt-8 md:text-4xl">
-			{shop.tagline}
-		</p>
-		<div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4 md:mt-10 md:gap-x-8">
-			<Button variant="primary" size="lg" href="#book" class="px-6 md:px-8">Book a chair</Button>
-			<a
-				href="#services"
-				class="decoration-primary hover:text-primary-accent text-base underline md:text-lg decoration-1 underline-offset-8 transition-colors"
-			>
-				See the price list
-			</a>
+	<!-- The name is set as large as the screen allows and sits over the top edge of the photo -->
+	<h1
+		class="relative z-10 mt-4 text-[27vw] leading-[0.78] tracking-[-0.045em] text-nowrap lg:mt-5 lg:text-[min(22vw,27rem)]"
+	>
+		{
+			shop.nameLines.map((line, i) => (
+				<span class:list={["block", i > 0 && "lg:pl-[0.85em]"]}>
+					{line.split("&").map((part, j) => (
+						<Fragment>
+							{j > 0 && <em class="text-primary">&amp;</em>}
+							{part}
+						</Fragment>
+					))}
+				</span>
+			))
+		}
+	</h1>
+
+	<div class="lg:grid lg:grid-cols-12 lg:gap-x-8">
+		<figure
+			class="relative -mt-[5.5vw] -mr-5 ml-[12%] md:-mr-10 lg:col-start-5 lg:col-end-13 lg:row-start-1 lg:-mt-[min(7vw,8.5rem)] lg:ml-0"
+		>
+			<Image
+				src={photos.hero.src}
+				alt={photos.hero.alt}
+				widths={[480, 800, 1100, 1500, 2000]}
+				sizes="(min-width: 1024px) 66vw, 88vw"
+				loading="eager"
+				fetchpriority="high"
+				class="aspect-4/3 w-full object-cover lg:aspect-16/10"
+			/>
+			<Seal class="absolute -bottom-9 -left-[11%] w-28 -rotate-12 sm:w-36 lg:bottom-14 lg:-left-22 lg:w-44" />
+		</figure>
+
+		<!-- On desktop this sits in the space to the right of the first line of the name -->
+		<div class="mt-16 lg:absolute lg:top-30 lg:right-10 lg:mt-0 lg:w-[21vw]">
+			<p class="font-display text-[2.5rem] leading-none italic lg:text-[min(2.7vw,3.3rem)] lg:leading-[1.02]">
+				{shop.tagline}
+			</p>
+			<div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 lg:mt-7">
+				<Cta href="#book">{copy.book}</Cta>
+				<a
+					href="#services"
+					class="label border-primary hover:text-primary-accent border-b pt-3 pb-2 transition-colors"
+				>
+					{copy.seePrices}
+				</a>
+			</div>
 		</div>
-		<p class="border-border text-muted-foreground mt-12 border-t pt-5 text-sm md:mt-16">
-			<span data-today-hours>Open {openDays[0].day} to {openDays[openDays.length - 1].day}.</span>{" "}
-			{shop.town}. Walk-ins welcome.
+
+		<p
+			class="label text-muted-foreground mt-10 leading-relaxed lg:col-start-1 lg:col-end-4 lg:row-start-1 lg:mt-0 lg:self-end lg:pb-1"
+		>
+			<span data-today-hours>Open {openDays[0].day} to {openDays[openDays.length - 1].day}.</span>
+			<span class="block">{shop.town}.</span>
 		</p>
 	</div>
 </section>

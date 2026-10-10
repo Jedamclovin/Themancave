@@ -1,0 +1,35 @@
+---
+// A round foil seal: trade and town around the edge, the founding year in the middle.
+// Decorative. The same facts appear as text elsewhere on the page.
+import { shop } from "@/data/shop";
+
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+const ring = `${shop.trade} ◆ ${shop.townShort} ◆ `.toUpperCase();
+---
+
+<svg viewBox="0 0 200 200" aria-hidden="true" class={className}>
+	<circle cx="100" cy="100" r="100" class="fill-primary"></circle>
+	<circle cx="100" cy="100" r="94" fill="none" stroke-width="1" class="stroke-primary-foreground"></circle>
+	<circle cx="100" cy="100" r="61" fill="none" stroke-width="1" class="stroke-primary-foreground"></circle>
+	<path id="seal-ring" d="M100,100 m-71,0 a71,71 0 1,1 142,0 a71,71 0 1,1 -142,0" fill="none"></path>
+	<text class="fill-primary-foreground font-sans" font-size="14.5" font-weight="700">
+		<textPath href="#seal-ring" textLength="440" lengthAdjust="spacing">{ring}</textPath>
+	</text>
+	<text
+		x="100"
+		y="88"
+		text-anchor="middle"
+		font-size="24"
+		font-style="italic"
+		class="fill-primary-foreground font-display"
+	>
+		Est.
+	</text>
+	<text x="100" y="128" text-anchor="middle" font-size="46" class="fill-primary-foreground font-display">
+		{shop.established}
+	</text>
+</svg>
