@@ -27,7 +27,7 @@ All stand-in files are in `src/assets/placeholder/`, with photographer credits i
 
 | Item | Where | Current state | What is needed |
 | --- | --- | --- | --- |
-| Favicon | Browser tab and phone home screen (`public/favicon.png`, `public/favicon.ico`, `public/apple-touch-icon.png`) | A logo supplied by ChairFill on 11 October 2026 (kept at `src/assets/logo.png`, white background removed). It is a different drawing from the logo on the shop's Instagram. | The shop's approval of this logo, or their own logo file to replace it. |
+| Favicon | Browser tab and phone home screen (`public/favicon.png`, `public/favicon.ico`, `public/apple-touch-icon.png`) | A "THE MC" mark supplied by ChairFill on 11 October 2026, in the sign lettering (kept at `src/assets/icon.png`). The fuller skull badge ChairFill also supplied is kept at `src/assets/logo.png` but is too detailed to read at tab size, so it is not used. Neither is the logo on the shop's Instagram. | The shop's approval of this mark, or their own logo file to replace it. |
 | Social share image | Link previews on WhatsApp, Facebook and so on | None set | A 1200 x 630 image, usually the shopfront or the logo on slate. |
 
 ## Prices to confirm
