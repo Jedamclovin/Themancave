@@ -37,13 +37,13 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(shop.mapQuery
 			</div>
 		</div>
 
-		<!-- The map runs off the right edge -->
-		<div class="mt-14 -mr-5 ml-[10%] md:-mr-10 lg:col-start-7 lg:col-end-13 lg:mt-0">
+		<!-- The map fills the column and stays inside the page margins at every width -->
+		<div class="mt-14 lg:col-start-7 lg:col-end-13 lg:mt-0">
 			<iframe
 				src={mapSrc}
 				title={`Map showing ${shop.name} at ${shop.street}, ${shop.town}`}
 				loading="lazy"
-				class="block h-80 w-full contrast-90 grayscale invert-[0.92] lg:h-[40rem]"
+				class="block h-80 w-full max-w-full rounded-lg border-0 contrast-90 grayscale invert-[0.92] lg:h-[40rem]"
 			></iframe>
 		</div>
 	</div>
