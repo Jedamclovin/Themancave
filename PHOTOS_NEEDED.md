@@ -27,7 +27,7 @@ All stand-in files are in `src/assets/placeholder/`, with photographer credits i
 
 | Item | Where | Current state | What is needed |
 | --- | --- | --- | --- |
-| Favicon | Browser tab (`public/favicon.svg`, `public/favicon.ico`) | Astro's default icon | The shop's logo, with their permission, as a square SVG or PNG. |
+| Favicon | Browser tab and phone home screen (`public/favicon.png`, `public/favicon.ico`, `public/apple-touch-icon.png`) | The shop's logo, taken from its Instagram profile picture at 150px. Used without the shop's permission so far. | The shop's permission, and the original logo file at 512px or larger so the icons can be remade sharply. |
 | Social share image | Link previews on WhatsApp, Facebook and so on | None set | A 1200 x 630 image, usually the shopfront or the logo on slate. |
 
 ## Prices to confirm
