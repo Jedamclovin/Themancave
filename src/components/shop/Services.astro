@@ -1,76 +1,56 @@
 ---
 import Ornament from "./Ornament.astro";
 import SectionHead from "./SectionHead.astro";
-import { copy, serviceGroups } from "@/data/shop";
+import { copy, services, shop } from "@/data/shop";
 
-const specials = serviceGroups.flatMap((group) => group.items.filter((item) => item.special));
+// Each line starts a little further in or out, so the list never reads as a table.
+const insets = ["", "lg:pl-[9%]", "lg:pl-[3%]", "lg:pl-[14%]"];
 ---
 
-<!-- The price board: cream paper, painted-sign lettering, the special pasted on at an angle -->
-<section id="services" class="defer-render bg-paper text-paper-foreground overflow-x-clip">
+<!-- The board: light, heavy capitals, the prices notice pasted on at an angle -->
+<section id="board" class="defer-render bg-paper text-paper-foreground overflow-x-clip">
 	<div class="px-5 pt-40 pb-24 md:px-10 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:pt-24 lg:pb-36">
 		<div class="lg:col-span-4">
-			<SectionHead number="01" title={copy.prices.title} tone="paper" />
-			<p class="font-display mt-6 max-w-[14ch] text-2xl leading-tight italic md:text-3xl">
-				{copy.prices.aside}
-			</p>
+			<SectionHead number="01" title={copy.board.title} tone="paper" />
+			<p class="mt-6 max-w-[20ch] text-xl font-semibold text-pretty">{copy.board.aside}</p>
 		</div>
 
-		<div class="mt-12 lg:col-start-5 lg:col-end-13 lg:mt-36">
-			<div class="border-paper-foreground border-2 p-1.5">
-				<div class="border-paper-foreground border px-4 pt-7 pb-10 sm:px-8 md:px-11 md:pt-10 md:pb-14">
-					<Ornament class="text-secondary" />
+		<div class="mt-12 lg:col-start-5 lg:col-end-13 lg:mt-40">
+			<Ornament class="text-secondary" />
+			<ol class="mt-4">
+				{
+					services.map((item, i) => (
+						<li
+							class:list={[
+								"border-paper-foreground flex items-baseline gap-4 border-b-2 pt-5 pb-3 lg:pt-7 lg:pb-4",
+								insets[i % insets.length],
+							]}
+						>
+							<span class="label text-secondary w-7 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+							<span class="font-display flex-1 text-[clamp(3rem,13.5vw,8.5rem)] leading-[0.84] font-black uppercase">
+								{item.name}
+							</span>
+							{item.price !== undefined && (
+								<span class="font-display text-secondary text-[clamp(2.25rem,8vw,5.5rem)] leading-none font-black tabular-nums">
+									£{item.price}
+								</span>
+							)}
+						</li>
+					))
+				}
+			</ol>
 
-					<div class="mt-9 grid gap-x-14 gap-y-12 md:grid-cols-2">
-						{
-							serviceGroups.map((group, i) => (
-								<div class:list={[i === 0 && "md:row-span-2"]}>
-									<h3 class="label text-secondary border-paper-foreground border-b pb-3 font-bold">
-										{group.title}
-									</h3>
-									<ul class="mt-5 space-y-5">
-										{group.items
-											.filter((item) => !item.special)
-											.map((item) => (
-												<li>
-													<div class="flex items-baseline">
-														<span class="font-display text-[1.6rem] leading-none font-medium md:text-3xl">
-															{item.name}
-														</span>
-														<span
-															aria-hidden="true"
-															class="border-paper-foreground/60 mx-2.5 min-w-5 flex-1 -translate-y-1 border-b-2 border-dotted"
-														/>
-														<span class="font-display text-secondary text-[1.75rem] leading-none font-medium tabular-nums md:text-4xl">
-															£{item.price}
-														</span>
-													</div>
-													<p class="label text-paper-muted mt-2">
-														{item.minutes} min{item.note ? `, ${item.note}` : ""}
-													</p>
-												</li>
-											))}
-									</ul>
-								</div>
-							))
-						}
-					</div>
-
-					{
-						specials.map((item) => (
-							<div class="bg-secondary text-secondary-foreground mt-12 -mr-7 ml-3 -rotate-2 px-6 py-6 sm:-mr-12 md:-mr-16 md:ml-[38%] md:px-8 md:py-7">
-								<p class="label">{copy.prices.special}</p>
-								<div class="mt-3 flex items-end justify-between gap-4">
-									<p class="font-display text-4xl leading-[0.95] italic md:text-5xl">{item.name}</p>
-									<p class="font-display text-5xl leading-none tabular-nums md:text-6xl">£{item.price}</p>
-								</div>
-								<p class="mt-3">
-									{item.note}. {item.minutes} min.
-								</p>
-							</div>
-						))
-					}
-				</div>
+			<div
+				class="bg-secondary text-secondary-foreground mt-12 -mr-8 ml-6 -rotate-2 px-6 py-6 sm:-mr-12 md:-mr-16 md:ml-[42%] md:px-8 md:py-7"
+			>
+				<p class="label text-primary-accent">{copy.board.noticeLabel}</p>
+				<p class="mt-3 max-w-[22ch] text-lg font-semibold">{copy.board.notice}</p>
+				<a
+					href={shop.phoneHref}
+					class="font-display hover:text-primary-accent mt-2 inline-block text-6xl leading-none font-black tabular-nums transition-colors md:text-7xl"
+				>
+					{shop.phone}
+				</a>
 			</div>
 		</div>
 	</div>

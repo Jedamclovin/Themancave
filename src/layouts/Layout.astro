@@ -1,5 +1,6 @@
 ---
 import "@/styles/starwind.css";
+import { hours, shop } from "@/data/shop";
 
 interface Props {
 	title: string;
@@ -7,6 +8,32 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+// Tells search engines the shop's address, phone and hours
+const pad = (time: string) => time.padStart(5, "0");
+const business = {
+	"@context": "https://schema.org",
+	"@type": "HairSalon",
+	name: shop.name,
+	telephone: shop.phoneIntl,
+	address: {
+		"@type": "PostalAddress",
+		streetAddress: shop.street,
+		addressLocality: shop.town,
+		postalCode: shop.postcode,
+		addressCountry: "GB",
+	},
+	geo: { "@type": "GeoCoordinates", latitude: shop.map.lat, longitude: shop.map.lon },
+	sameAs: [shop.instagram.url],
+	openingHoursSpecification: hours
+		.filter((row) => row.open && row.close)
+		.map((row) => ({
+			"@type": "OpeningHoursSpecification",
+			dayOfWeek: row.day,
+			opens: pad(row.open!),
+			closes: pad(row.close!),
+		})),
+};
 ---
 
 <!doctype html>
@@ -17,13 +44,15 @@ const { title, description } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="description" content={description} />
+		{shop.draft && <meta name="robots" content="noindex, nofollow" />}
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<script type="application/ld+json" set:html={JSON.stringify(business)} />
 	</head>
 	<body>
 		<a
 			href="#main"
-			class="bg-primary text-primary-foreground sr-only z-50 rounded-md px-4 py-2 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+			class="bg-primary text-primary-foreground sr-only z-50 px-4 py-2 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
 		>
 			Skip to content
 		</a>

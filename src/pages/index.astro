@@ -4,27 +4,29 @@ import Header from "@/components/shop/Header.astro";
 import Hero from "@/components/shop/Hero.astro";
 import About from "@/components/shop/About.astro";
 import Services from "@/components/shop/Services.astro";
-import Barbers from "@/components/shop/Barbers.astro";
-import Gallery from "@/components/shop/Gallery.astro";
+import Clocks from "@/components/shop/Clocks.astro";
 import Reviews from "@/components/shop/Reviews.astro";
+import Follow from "@/components/shop/Follow.astro";
 import Visit from "@/components/shop/Visit.astro";
 import Footer from "@/components/shop/Footer.astro";
 import StickyBar from "@/components/shop/StickyBar.astro";
-import { shop } from "@/data/shop";
+import { services, shop } from "@/data/shop";
+
+const serviceList = services.map((item) => item.name.toLowerCase()).join(", ");
 ---
 
 <Layout
-	title={`${shop.name}. ${shop.strapline}`}
-	description={`${shop.name}, ${shop.town}. ${shop.tagline} Classic cuts, skin fades and hot towel shaves. Book a chair or walk in.`}
+	title={`${shop.name}. Barbers at ${shop.street}, ${shop.town}.`}
+	description={`${shop.name}, barbers at ${shop.street}, ${shop.town} ${shop.postcode}. ${shop.landmark}, open seven days. ${serviceList}. Call ${shop.phone}.`}
 >
 	<Header />
 	<main id="main">
 		<Hero />
 		<About />
 		<Services />
-		<Barbers />
-		<Gallery />
+		<Clocks />
 		<Reviews />
+		<Follow />
 		<Visit />
 	</main>
 	<Footer />

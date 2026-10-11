@@ -1,0 +1,20 @@
+---
+// A street nameplate, like the one on the wall beside the shop: black capitals on a white plate.
+// Decorative. The address appears as text elsewhere on the page.
+import { shop } from "@/data/shop";
+
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={["bg-paper text-paper-foreground inline-block p-1", className]}>
+	<div class="border-paper-foreground flex items-center gap-3 border-2 px-3 py-2 sm:px-4 sm:py-2.5">
+		<span class="font-display text-3xl leading-none font-black sm:text-4xl">{shop.streetNumber}</span>
+		<span class="text-sm leading-none font-extrabold tracking-[0.16em] whitespace-nowrap uppercase sm:text-base">
+			{shop.streetName}
+		</span>
+	</div>
+</div>

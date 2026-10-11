@@ -3,27 +3,28 @@ import Ornament from "./Ornament.astro";
 import { copy, shop } from "@/data/shop";
 ---
 
-<footer class="defer-render overflow-x-clip px-5 pt-16 pb-28 md:px-10 md:pt-24 md:pb-12">
-	<p
-		class="font-display text-[19vw] leading-[0.85] tracking-[-0.035em] italic md:text-[11.9vw] md:whitespace-nowrap"
-	>
+<footer class="defer-render bg-sign text-sign-foreground overflow-x-clip px-5 pt-16 pb-28 md:px-10 md:pt-24 md:pb-12">
+	<p class="font-display sign-raised text-[25vw] leading-[0.8] font-black uppercase md:text-[19vw] md:whitespace-nowrap">
 		{copy.signOff}
 	</p>
 
-	<Ornament class="text-primary mt-14 md:mt-20" />
+	<Ornament class="text-primary-accent mt-14 md:mt-20" />
 
 	<div class="mt-8 grid gap-8 md:grid-cols-3">
 		<div>
 			<p class="label tracking-[0.28em]">{shop.name}</p>
-			<p class="text-muted-foreground mt-2">{shop.strapline}</p>
+			<p class="mt-2 opacity-80">{shop.strapline}</p>
 		</div>
 		<p>
-			{shop.town}
+			{shop.street}, {shop.town} {shop.postcode}
 			<a href={shop.phoneHref} class="hover:text-primary-accent block transition-colors">{shop.phone}</a>
+			<a href={shop.instagram.url} class="hover:text-primary-accent block transition-colors">
+				{shop.instagram.handle}
+			</a>
 		</p>
-		<div class="text-muted-foreground text-sm md:text-right">
-			<p>{shop.footerNote}</p>
-			<p class="mt-1">{shop.photoCredit}</p>
+		<div class="text-sm opacity-80 md:text-right">
+			<p>{shop.draft ? shop.draftNote : shop.liveNote}</p>
+			{shop.photoNote && <p class="mt-1">{shop.photoNote}</p>}
 		</div>
 	</div>
 </footer>

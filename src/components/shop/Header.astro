@@ -3,14 +3,14 @@ import Cta from "./Cta.astro";
 import { copy, shop } from "@/data/shop";
 
 const links = [
-	{ href: "#services", label: copy.nav.prices },
-	{ href: "#barbers", label: copy.nav.chairs },
+	{ href: "#board", label: copy.nav.board },
+	{ href: "#clocks", label: copy.nav.clocks },
 	{ href: "#visit", label: copy.nav.visit },
 ];
 ---
 
-<header class="px-5 md:px-10">
-	<div class="border-primary/40 flex items-center justify-between gap-4 border-b py-4 md:py-5">
+<header class="bg-sign text-sign-foreground px-5 md:px-10">
+	<div class="border-sign-foreground/30 flex items-center justify-between gap-4 border-b py-4 md:py-5">
 		<a href="/" class="label text-[0.8125rem] tracking-[0.28em] whitespace-nowrap">{shop.name}</a>
 		<nav aria-label="Main" class="flex shrink-0 items-center gap-9">
 			<ul class="hidden items-center gap-9 lg:flex">
@@ -24,8 +24,8 @@ const links = [
 					))
 				}
 			</ul>
-			<Cta href="#book" class="hidden h-11 px-5 md:inline-flex">{copy.book}</Cta>
-			<span class="label text-primary md:hidden">Est. {shop.established}</span>
+			<Cta href={shop.phoneHref} class="hidden h-11 px-5 md:inline-flex">{`${copy.ring} ${shop.phone}`}</Cta>
+			<span class="label text-primary-accent md:hidden">{shop.street}</span>
 		</nav>
 	</div>
 </header>

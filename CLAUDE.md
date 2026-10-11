@@ -1,6 +1,6 @@
-# barber-base
+# The Man Cave, Chelmsford
 
-Reusable base for premium barber shop websites. Each shop is built from this base and gets its own theme.
+Spec site for a real barber shop, built from barber-base. The verified facts, open questions and art direction are in `shop-brief.md`; photo slots are in `PHOTOS_NEEDED.md`. Use real data only: nothing about the shop may be invented, and the site stays `noindex` (`draft: true` in `src/data/shop.ts`) until the shop signs.
 
 ## Design rules
 
@@ -83,7 +83,7 @@ These apply to every shop. A site should look designed by a person with taste, f
 ### Structure
 
 - Everything specific to a shop (facts, copy, photos) lives in `src/data/shop.ts`. Components in `src/components/shop/` must not contain shop content.
-- Display fonts with several variable axes are heavy. Subset them (see `scripts/subset-display-font.py`) and re-run Lighthouse on mobile after any font change.
+- Display fonts with several variable axes are heavy. Re-run Lighthouse on mobile after any font change.
 
 ### Process
 

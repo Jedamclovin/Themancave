@@ -1,27 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/manrope";
+@import "@fontsource-variable/big-shoulders-display";
 @plugin "@tailwindcss/forms";
 @custom-variant dark (&:where(.dark, .dark *));
-
-/*
- * Display face: Fraunces with the soft shapes baked in, weight 400 to 600, variable
- * optical size. Built by scripts/subset-display-font.py to keep the files small.
- */
-@font-face {
-  font-family: "Fraunces Soft";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("../assets/fonts/fraunces-soft-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Fraunces Soft";
-  font-style: italic;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("../assets/fonts/fraunces-soft-italic.woff2") format("woff2");
-}
 
 /*
  * Shop theme. This file is the only place colours and fonts are defined.
@@ -67,6 +49,9 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-accent: var(--secondary-accent);
+  --color-sign: var(--sign);
+  --color-sign-foreground: var(--sign-foreground);
+  --color-sign-shade: var(--sign-shade);
   --color-paper: var(--paper);
   --color-paper-foreground: var(--paper-foreground);
   --color-paper-muted: var(--paper-muted);
@@ -105,43 +90,48 @@
 }
 
 :root {
-  /* Palette (Hartwell & Vane): near black, cream, brass and oxblood */
-  --ink: #141110;
-  --char: #1f1a18;
-  --char-raised: #2b2422;
-  --bone: #ede6da;
-  --smoke: #a69d8f;
-  --brass: #b08d57;
-  --brass-light: #c9a974;
-  --oxblood: #6e1f1f;
+  /* Palette (The Man Cave): charcoal walls, slate fascia, logo gold, bench plum */
+  --ink: #14171a;
+  --slate: #3e4b59;
+  --slate-deep: #232b33;
+  --slate-shade: #1a2027;
+  --steel: #ebe9e3;
+  --smoke: #9da6ad;
+  --gold: #c9a24b;
+  --gold-light: #dfbc6c;
+  --plum: #6a2147;
 
   /* Fonts: one display face, one body face */
-  --font-heading: "Fraunces Soft", Georgia, serif;
+  --font-heading: "Big Shoulders Display Variable", "Arial Narrow", Impact, sans-serif;
   --font-body: "Manrope Variable", system-ui, sans-serif;
 
-  /* Paper grain over the whole page. Set to 0 to switch it off. */
-  --grain-opacity: 0.055;
+  /* Grain over the whole page. Set to 0 to switch it off. */
+  --grain-opacity: 0.04;
 
   --background: var(--ink);
-  --foreground: var(--bone);
-  --card: var(--char);
-  --card-foreground: var(--bone);
-  --popover: var(--char);
-  --popover-foreground: var(--bone);
-  --primary: var(--brass);
+  --foreground: var(--steel);
+  --card: var(--slate-deep);
+  --card-foreground: var(--steel);
+  --popover: var(--slate-deep);
+  --popover-foreground: var(--steel);
+  --primary: var(--gold);
   --primary-foreground: var(--ink);
-  --primary-accent: var(--brass-light);
-  --secondary: var(--oxblood);
-  --secondary-foreground: var(--bone);
-  --secondary-accent: var(--bone);
-  /* The inverted, printed-paper sections */
-  --paper: var(--bone);
+  --primary-accent: var(--gold-light);
+  --secondary: var(--plum);
+  --secondary-foreground: var(--steel);
+  --secondary-accent: var(--steel);
+  /* The fascia: the slate shop sign and the block shading behind its letters */
+  --sign: var(--slate);
+  --sign-foreground: var(--steel);
+  --sign-shade: var(--slate-shade);
+  /* The inverted, light sections */
+  --paper: var(--steel);
   --paper-foreground: var(--ink);
-  --paper-muted: #5c5049;
-  --muted: var(--char);
+  --paper-muted: #515a63;
+  --muted: var(--slate-deep);
   --muted-foreground: var(--smoke);
-  --accent: var(--char-raised);
-  --accent-foreground: var(--bone);
+  --accent: var(--slate);
+  --accent-foreground: var(--steel);
   --info: var(--color-sky-300);
   --info-foreground: var(--color-sky-950);
   --success: var(--color-green-300);
@@ -149,19 +139,19 @@
   --warning: var(--color-amber-300);
   --warning-foreground: var(--color-amber-950);
   --error: var(--color-red-800);
-  --error-foreground: var(--bone);
-  --border: color-mix(in oklch, var(--bone) 12%, transparent);
-  --input: color-mix(in oklch, var(--bone) 18%, transparent);
-  --outline: var(--brass-light);
-  --radius: 0.125rem;
+  --error-foreground: var(--steel);
+  --border: color-mix(in oklch, var(--steel) 14%, transparent);
+  --input: color-mix(in oklch, var(--steel) 18%, transparent);
+  --outline: var(--gold-light);
+  --radius: 0rem;
 
   /* sidebar variables */
-  --sidebar-background: var(--char);
-  --sidebar-foreground: var(--bone);
-  --sidebar-primary: var(--brass);
+  --sidebar-background: var(--slate-deep);
+  --sidebar-foreground: var(--steel);
+  --sidebar-primary: var(--gold);
   --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--char-raised);
-  --sidebar-accent-foreground: var(--bone);
+  --sidebar-accent: var(--slate);
+  --sidebar-accent-foreground: var(--steel);
   --sidebar-border: var(--border);
   --sidebar-outline: var(--outline);
 }
@@ -189,16 +179,7 @@
   h4,
   h5,
   h6 {
-    @apply font-display leading-[0.92] font-normal tracking-[-0.02em] text-balance;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .font-display {
-    font-optical-sizing: auto;
+    @apply font-display leading-[0.86] font-extrabold tracking-normal text-balance uppercase;
   }
   button {
     @apply cursor-pointer;
@@ -223,9 +204,36 @@
   text-transform: uppercase;
 }
 
-/* Pinked bottom edge, like a ticket torn off a pad */
-@utility torn-edge {
-  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+/* Raised sign lettering: hard block shading down and to the right, like letters standing off the fascia */
+@utility sign-raised {
+  text-shadow:
+    0.012em 0.012em 0 var(--sign-shade),
+    0.024em 0.024em 0 var(--sign-shade),
+    0.036em 0.036em 0 var(--sign-shade),
+    0.048em 0.048em 0 var(--sign-shade),
+    0.06em 0.06em 0 var(--sign-shade),
+    0.072em 0.072em 0 var(--sign-shade);
+}
+
+/* Buttoned leather, like the shop's bench: a button at each crossing of the diamond creases */
+@utility tufted {
+  --tuft: color-mix(in oklch, black 30%, transparent);
+  --crease: color-mix(in oklch, black 14%, transparent);
+  background-image:
+    radial-gradient(circle, var(--tuft) 0 3px, transparent 3.5px),
+    radial-gradient(circle, var(--tuft) 0 3px, transparent 3.5px),
+    repeating-linear-gradient(45deg, transparent 0 calc(2.5rem * 0.7071 - 0.5px), var(--crease) 0 calc(2.5rem * 0.7071 + 0.5px)),
+    repeating-linear-gradient(-45deg, transparent 0 calc(2.5rem * 0.7071 - 0.5px), var(--crease) 0 calc(2.5rem * 0.7071 + 0.5px));
+  background-size:
+    5rem 5rem,
+    5rem 5rem,
+    auto,
+    auto;
+  background-position:
+    0 0,
+    2.5rem 2.5rem,
+    0 0,
+    0 0;
 }
 
 /* Sections below the first screen are laid out and painted only as they come near the viewport */

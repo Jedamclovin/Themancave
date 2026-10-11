@@ -1,0 +1,210 @@
+---
+// Opening hours as the shop's wall of clocks: one clock per day, set to opening time,
+// with the open hours marked round the rim. The large clock keeps the shop's local time.
+import SectionHead from "./SectionHead.astro";
+import { copy, hours, shop } from "@/data/shop";
+
+const toMinutes = (time: string) => {
+	const [h, m] = time.split(":").map(Number);
+	return h * 60 + m;
+};
+// Position on a 12 hour dial, in degrees clockwise from 12
+const dialAngle = (time: string) => ((toMinutes(time) % 720) / 720) * 360;
+const point = (radius: number, degrees: number) => {
+	const rad = (degrees * Math.PI) / 180;
+	return `${(100 + radius * Math.sin(rad)).toFixed(2)},${(100 - radius * Math.cos(rad)).toFixed(2)}`;
+};
+// The stretch of the rim between opening and closing
+const openArc = (open: string, close: string, radius: number) => {
+	const span = ((toMinutes(close) - toMinutes(open)) / 720) * 360;
+	return `M${point(radius, dialAngle(open))} A${radius},${radius} 0 ${span > 180 ? 1 : 0} 1 ${point(radius, dialAngle(close))}`;
+};
+
+const ticks = Array.from({ length: 12 }, (_, i) => i * 30);
+const days = hours.map((row) => ({
+	...row,
+	arc: row.open && row.close ? openArc(row.open, row.close, 86) : null,
+	hourHand: row.open ? dialAngle(row.open) : 0,
+	minuteHand: row.open ? (toMinutes(row.open) % 60) * 6 : 0,
+}));
+---
+
+<section id="clocks" class="defer-render bg-card text-card-foreground overflow-x-clip px-5 pt-24 pb-24 md:px-10 lg:pt-36 lg:pb-40">
+	<div class="lg:grid lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8">
+		<div class="lg:col-span-6">
+			<SectionHead number="02" title={copy.clocks.title} />
+			<p class="text-muted-foreground mt-6 max-w-[30ch] text-lg">{copy.clocks.intro}</p>
+		</div>
+
+		<!-- The large clock: local time, with today's open hours on the rim -->
+		<div class="mt-12 -mr-16 ml-[18%] sm:mr-0 sm:ml-auto sm:w-96 lg:col-start-8 lg:col-end-13 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:-mr-28 lg:ml-0 lg:w-auto">
+			<svg viewBox="0 0 200 200" aria-hidden="true" class="block w-full">
+				<circle cx="100" cy="100" r="99" class="fill-background"></circle>
+				<circle cx="100" cy="100" r="93" class="fill-paper"></circle>
+				{
+					days.map(
+						(row) =>
+							row.arc && (
+								<path
+									d={row.arc}
+									data-now-arc={row.day}
+									fill="none"
+									stroke-width="7"
+									class="stroke-secondary hidden"
+								/>
+							),
+					)
+				}
+				{
+					ticks.map((deg) => (
+						<line
+							x1="100"
+							y1="20"
+							x2="100"
+							y2={deg % 90 === 0 ? 34 : 28}
+							stroke-width={deg % 90 === 0 ? 4 : 2}
+							transform={`rotate(${deg} 100 100)`}
+							class="stroke-paper-foreground"
+						/>
+					))
+				}
+				<line data-hand="hour" x1="100" y1="108" x2="100" y2="54" stroke-width="6" class="stroke-paper-foreground" transform="rotate(305 100 100)"></line>
+				<line data-hand="minute" x1="100" y1="112" x2="100" y2="30" stroke-width="3.5" class="stroke-paper-foreground" transform="rotate(60 100 100)"></line>
+				<line data-hand="second" x1="100" y1="118" x2="100" y2="26" stroke-width="1.25" class="stroke-secondary hidden"></line>
+				<circle cx="100" cy="100" r="4.5" class="fill-secondary"></circle>
+			</svg>
+		</div>
+
+		<p class="mt-8 lg:col-start-1 lg:col-end-8 lg:row-start-2 lg:mt-16 lg:self-end lg:pb-6">
+			<span class="label text-primary block">{copy.clocks.nowLabel}</span>
+			<span data-now-status class="font-display mt-3 block text-5xl leading-[0.9] font-extrabold uppercase md:text-7xl">
+				{shop.street}
+			</span>
+		</p>
+	</div>
+
+	<!-- The wall: one clock for each day -->
+	<ol class="mt-16 grid gap-x-6 gap-y-7 sm:grid-cols-4 sm:gap-y-12 lg:mt-24 lg:grid-cols-7 lg:gap-x-5">
+		{
+			days.map((row) => (
+				<li
+					data-day={row.day}
+					data-open={row.open ?? ""}
+					data-close={row.close ?? ""}
+					class="group flex items-center gap-5 sm:block lg:even:mt-12"
+				>
+					<svg viewBox="0 0 200 200" aria-hidden="true" class="block w-21 shrink-0 sm:w-full">
+						<circle cx="100" cy="100" r="99" class="fill-background group-data-today:fill-primary"></circle>
+						<circle cx="100" cy="100" r="92" class="fill-paper"></circle>
+						{row.arc && <path d={row.arc} fill="none" stroke-width="8" class="stroke-secondary" />}
+						{
+							ticks.map((deg) => (
+								<line
+									x1="100"
+									y1="20"
+									x2="100"
+									y2={deg % 90 === 0 ? 36 : 29}
+									stroke-width={deg % 90 === 0 ? 5 : 2.5}
+									transform={`rotate(${deg} 100 100)`}
+									class="stroke-paper-foreground"
+								/>
+							))
+						}
+						{row.open && (
+							<Fragment>
+								<line x1="100" y1="110" x2="100" y2="56" stroke-width="8" transform={`rotate(${row.hourHand} 100 100)`} class="stroke-paper-foreground" />
+								<line x1="100" y1="114" x2="100" y2="32" stroke-width="5" transform={`rotate(${row.minuteHand} 100 100)`} class="stroke-paper-foreground" />
+							</Fragment>
+						)}
+						<circle cx="100" cy="100" r="6" class="fill-secondary"></circle>
+					</svg>
+					<p class="sm:mt-5">
+						<span class="label group-data-today:text-primary block">
+							{row.day}
+							<span class="hidden group-data-today:inline">, {copy.clocks.today.toLowerCase()}</span>
+						</span>
+						<span class="font-display mt-1.5 block text-3xl leading-none font-bold whitespace-nowrap tabular-nums lg:text-[min(2.3vw,2.25rem)]">
+							{row.open ? `${row.open} to ${row.close}` : "Closed"}
+						</span>
+					</p>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<script
+	is:inline
+	define:vars={{
+		timeZone: shop.timeZone,
+		openNow: copy.clocks.openNow,
+		closedNow: copy.clocks.closedNow,
+		opensAt: copy.clocks.opensAt,
+	}}
+>
+	// Mark today's clock, show today's hours in the hero, and run the large clock on the shop's local time
+	const rows = [...document.querySelectorAll("#clocks li[data-day]")];
+	const hands = Object.fromEntries(
+		["hour", "minute", "second"].map((name) => [name, document.querySelector(`[data-hand="${name}"]`)]),
+	);
+	const status = document.querySelector("[data-now-status]");
+	const heroLabel = document.querySelector("[data-today-hours]");
+	const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+	const format = new Intl.DateTimeFormat("en-GB", {
+		timeZone,
+		weekday: "long",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric",
+		hourCycle: "h23",
+	});
+	const minutes = (time) => {
+		const [h, m] = time.split(":").map(Number);
+		return h * 60 + m;
+	};
+	const turn = (hand, degrees) => hand.setAttribute("transform", `rotate(${degrees} 100 100)`);
+	let shownDay = "";
+
+	function tick() {
+		const parts = Object.fromEntries(format.formatToParts(new Date()).map((part) => [part.type, part.value]));
+		const [h, m, s] = [Number(parts.hour), Number(parts.minute), Number(parts.second)];
+		turn(hands.hour, (h % 12) * 30 + m / 2);
+		turn(hands.minute, m * 6 + s / 10);
+		if (!calm) {
+			hands.second.classList.remove("hidden");
+			turn(hands.second, s * 6);
+		}
+
+		const index = rows.findIndex((row) => row.dataset.day === parts.weekday);
+		if (index < 0) return;
+		const today = rows[index].dataset;
+		if (shownDay !== parts.weekday) {
+			shownDay = parts.weekday;
+			rows.forEach((row, i) => row.toggleAttribute("data-today", i === index));
+			document
+				.querySelectorAll("[data-now-arc]")
+				.forEach((arc) => arc.classList.toggle("hidden", arc.dataset.nowArc !== parts.weekday));
+			if (heroLabel) {
+				heroLabel.textContent = today.open ? `Open today, ${today.open} to ${today.close}.` : "Closed today.";
+			}
+		}
+
+		const now = h * 60 + m;
+		let text;
+		if (today.open && now >= minutes(today.open) && now < minutes(today.close)) {
+			text = `${openNow} ${today.close}.`;
+		} else if (today.open && now < minutes(today.open)) {
+			text = `${closedNow} ${opensAt} ${today.open}.`;
+		} else {
+			// Find the next day the shop opens
+			const next = [1, 2, 3, 4, 5, 6, 7].map((n) => ({ n, row: rows[(index + n) % rows.length].dataset })).find((d) => d.row.open);
+			text = next
+				? `${closedNow} ${opensAt} ${next.row.open}${next.n === 1 ? " tomorrow" : ` on ${next.row.day}`}.`
+				: closedNow;
+		}
+		if (status.textContent !== text) status.textContent = text;
+	}
+
+	tick();
+	setInterval(tick, calm ? 20000 : 1000);
+</script>

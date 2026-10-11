@@ -1,0 +1,23 @@
+---
+// The gold band: the shop's Instagram handle, set as large as it will go. The whole band is one link.
+import { copy, shop } from "@/data/shop";
+
+// Break the handle after the shop name on narrow screens
+const handle = shop.instagram.handle;
+const split = handle.toLowerCase().indexOf(shop.town.toLowerCase());
+const parts = split > 0 ? [handle.slice(0, split), handle.slice(split)] : [handle];
+---
+
+<section class="defer-render bg-primary text-primary-foreground overflow-x-clip">
+	<a href={shop.instagram.url} class="group block px-5 pt-12 pb-14 -outline-offset-8! md:px-10 lg:pt-16 lg:pb-20">
+		<span class="label block">{copy.follow.label}</span>
+		<span
+			class="font-display mt-4 block text-[17.6vw] leading-[0.8] font-black uppercase md:text-[9.3vw] md:whitespace-nowrap"
+		>
+			{parts.map((part) => <span class="block md:inline">{part}</span>)}
+		</span>
+		<span class="label border-primary-foreground mt-8 inline-block border-b-2 pb-2 group-hover:border-transparent">
+			{copy.follow.cta}
+		</span>
+	</a>
+</section>

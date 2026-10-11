@@ -1,71 +1,66 @@
 ---
 import { Image } from "astro:assets";
 import Cta from "./Cta.astro";
-import Seal from "./Seal.astro";
-import { copy, hours, photos, shop } from "@/data/shop";
+import Nameplate from "./Nameplate.astro";
+import { copy, photos, shop } from "@/data/shop";
 
-// Shown until the script in Visit.astro swaps in today's hours
-const openDays = hours.filter((row) => row.open);
+const [firstLine, ...otherLines] = shop.signLines;
 ---
 
-<section class="relative overflow-x-clip px-5 pt-7 pb-20 md:px-10 md:pt-10 lg:pb-32">
-	<p class="label text-primary">{shop.strapline}</p>
-
-	<!-- The name is set as large as the screen allows and sits over the top edge of the photo -->
-	<h1
-		class="relative z-10 mt-4 text-[27vw] leading-[0.78] tracking-[-0.045em] text-nowrap lg:mt-5 lg:text-[min(22vw,27rem)]"
-	>
-		{
-			shop.nameLines.map((line, i) => (
-				<span class:list={["block", i > 0 && "lg:pl-[0.85em]"]}>
-					{line.split("&").map((part, j) => (
-						<Fragment>
-							{j > 0 && <em class="text-primary">&amp;</em>}
-							{part}
-						</Fragment>
-					))}
+<section class="relative overflow-x-clip pb-20 lg:pb-32">
+	<!-- The fascia: the shop sign, set as large as the screen allows, with "The" on its side as on the real one -->
+	<div class="bg-sign text-sign-foreground px-5 pt-7 pb-[19vw] md:px-10 md:pt-9 lg:pb-16">
+		<p class="label text-primary-accent">{shop.strapline}</p>
+		<h1
+			class="sign-raised mt-5 text-[43vw] leading-[0.8] font-black text-nowrap lg:mt-6 lg:text-[min(25.5vw,31rem)]"
+		>
+			<span class="flex items-stretch">
+				<span
+					class="mr-[0.07em] -ml-[0.02em] rotate-180 self-center text-[0.235em] leading-none tracking-[0.04em] [writing-mode:vertical-rl]"
+				>
+					{shop.signPrefix}
 				</span>
-			))
-		}
-	</h1>
+				<span>{firstLine}</span>
+			</span>
+			{otherLines.map((line) => <span class="block">{line}</span>)}
+		</h1>
+	</div>
 
-	<div class="lg:grid lg:grid-cols-12 lg:gap-x-8">
+	<div class="px-5 md:px-10 lg:grid lg:grid-cols-12 lg:gap-x-8">
+		<!-- The photo hangs off the bottom of the fascia and runs off the right edge -->
 		<figure
-			class="relative -mt-[5.5vw] -mr-5 ml-[12%] md:-mr-10 lg:col-start-5 lg:col-end-13 lg:row-start-1 lg:-mt-[min(7vw,8.5rem)] lg:ml-0"
+			class="relative z-10 -mt-[13vw] -mr-5 ml-[16%] md:-mr-10 lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:-mt-[min(27vw,33rem)] lg:ml-0"
 		>
 			<Image
 				src={photos.hero.src}
 				alt={photos.hero.alt}
-				widths={[480, 800, 1100, 1500, 2000]}
-				sizes="(min-width: 1024px) 66vw, 88vw"
+				widths={[480, 800, 1100, 1500]}
+				sizes="(min-width: 1024px) 42vw, 84vw"
 				loading="eager"
 				fetchpriority="high"
-				class="aspect-4/3 w-full object-cover lg:aspect-16/10"
+				class="aspect-4/5 w-full object-cover lg:aspect-3/4"
+				style={`object-position: ${photos.hero.position}`}
 			/>
-			<Seal class="absolute -bottom-9 -left-[11%] w-28 -rotate-12 sm:w-36 lg:bottom-14 lg:-left-22 lg:w-44" />
+			<Nameplate class="absolute -bottom-6 -left-[14%] -rotate-3 lg:-bottom-8 lg:-left-16" />
 		</figure>
 
-		<!-- On desktop this sits in the space to the right of the first line of the name -->
-		<div class="mt-16 lg:absolute lg:top-30 lg:right-10 lg:mt-0 lg:w-[21vw]">
-			<p class="font-display text-[2.5rem] leading-none italic lg:text-[min(2.7vw,3.3rem)] lg:leading-[1.02]">
+		<div class="mt-16 lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:mt-14">
+			<p class="font-display text-[2.6rem] leading-[0.95] font-bold uppercase text-balance lg:text-[min(4.4vw,5rem)]">
 				{shop.tagline}
 			</p>
-			<div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 lg:mt-7">
-				<Cta href="#book">{copy.book}</Cta>
+			<div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
+				<Cta href={shop.phoneHref}>{`${copy.ring} ${shop.phone}`}</Cta>
 				<a
-					href="#services"
+					href="#clocks"
 					class="label border-primary hover:text-primary-accent border-b pt-3 pb-2 transition-colors"
 				>
-					{copy.seePrices}
+					{copy.seeHours}
 				</a>
 			</div>
+			<p class="label text-muted-foreground mt-10 leading-relaxed">
+				<span data-today-hours>Open seven days.</span>
+				<span class="block">{shop.street}, {shop.town}. {shop.landmark}.</span>
+			</p>
 		</div>
-
-		<p
-			class="label text-muted-foreground mt-10 leading-relaxed lg:col-start-1 lg:col-end-4 lg:row-start-1 lg:mt-0 lg:self-end lg:pb-1"
-		>
-			<span data-today-hours>Open {openDays[0].day} to {openDays[openDays.length - 1].day}.</span>
-			<span class="block">{shop.town}.</span>
-		</p>
 	</div>
 </section>

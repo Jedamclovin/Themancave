@@ -1,47 +1,36 @@
 ---
+// No reviews are quoted on the site. This section sends people to the shop's Google listing,
+// and shows the Google rating once it is set in the shop data.
+import Cta from "./Cta.astro";
 import SectionHead from "./SectionHead.astro";
-import { copy, reviews } from "@/data/shop";
+import { copy, shop } from "@/data/shop";
 
-const [lead, ...rest] = reviews;
-
-// Tickets sit slightly askew and never line up in a row.
-const places = [
-	"ml-auto rotate-2 lg:col-start-9 lg:col-end-13 lg:row-start-1 lg:-mt-72",
-	"-rotate-1 lg:col-start-2 lg:col-end-6 lg:row-start-2",
-	"ml-auto rotate-1 lg:col-start-6 lg:col-end-10 lg:row-start-2 lg:mt-24",
-	"-rotate-2 lg:col-start-9 lg:col-end-13 lg:row-start-3 lg:-mt-20",
-];
+const rating = shop.googleRating;
 ---
 
-<section id="reviews" class="defer-render bg-card overflow-x-clip px-5 py-24 md:px-10 lg:pt-36 lg:pb-44">
-	<SectionHead number="04" title={copy.reviews.title} size="sm" />
+<section id="reviews" class="defer-render overflow-x-clip px-5 py-24 md:px-10 lg:pt-36 lg:pb-40">
+	<SectionHead number="03" title={copy.reviews.title} size="sm" />
 
-	<figure class="mt-12 lg:mt-16 lg:max-w-[64%]">
-		<blockquote class="font-display text-[clamp(2.6rem,6vw,6.25rem)] leading-[0.98] tracking-[-0.02em] italic">
-			“{lead.quote}”
-		</blockquote>
-		<figcaption class="label text-primary mt-7">{lead.name}</figcaption>
-	</figure>
-
-	<ul class="mt-16 space-y-10 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:space-y-0">
-		{
-			rest.map((review, i) => (
-				<li class:list={["w-[88%] sm:w-[60%] lg:w-auto", places[i % places.length]]}>
-					<figure class="bg-paper text-paper-foreground torn-edge px-6 pt-5 pb-10">
-						<div class="label text-paper-muted border-paper-foreground/50 flex justify-between border-b border-dashed pb-3">
-							<span>{copy.reviews.ticketLabel}</span>
-							<span>No. {String(i + 2).padStart(3, "0")}</span>
-						</div>
-						<blockquote class="font-display mt-5 text-[1.65rem] leading-[1.1] font-medium text-pretty">
-							“{review.quote}”
-						</blockquote>
-						<figcaption class="mt-6 flex items-baseline gap-3">
-							<span class="label text-paper-muted">{copy.reviews.signed}</span>
-							<span class="font-display text-secondary text-2xl italic">{review.name}</span>
-						</figcaption>
-					</figure>
-				</li>
-			))
-		}
-	</ul>
+	<div class="mt-12 lg:mt-16 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-8">
+		<p
+			class="font-display text-[clamp(4rem,13vw,13rem)] leading-[0.8] font-black uppercase text-balance lg:col-span-9"
+		>
+			{copy.reviews.line}
+		</p>
+		<div class="mt-10 lg:col-start-10 lg:col-end-13 lg:mt-0 lg:pb-2">
+			{
+				rating && (
+					<p class="mb-7">
+						<span class="font-display text-primary block text-8xl leading-none font-black tabular-nums">
+							{rating.score.toFixed(1)}
+						</span>
+						<span class="label mt-2 block">
+							From {rating.count} {copy.reviews.ratingLabel}
+						</span>
+					</p>
+				)
+			}
+			<Cta href={shop.googleListing}>{copy.reviews.cta}</Cta>
+		</div>
+	</div>
 </section>
