@@ -28,7 +28,7 @@ All stand-in files are in `src/assets/placeholder/`, with photographer credits i
 | Item | Where | Current state | What is needed |
 | --- | --- | --- | --- |
 | Favicon | Browser tab and phone home screen (`public/favicon.png`, `public/favicon.ico`, `public/apple-touch-icon.png`) | A "THE MC" mark supplied by ChairFill on 11 October 2026, in the sign lettering (kept at `src/assets/icon.png`). The fuller skull badge ChairFill also supplied is kept at `src/assets/logo.png` but is too detailed to read at tab size, so it is not used. Neither is the logo on the shop's Instagram. | The shop's approval of this mark, or their own logo file to replace it. |
-| Link preview image | The card shown when the link is shared on WhatsApp, Instagram, Facebook and so on (`public/og.jpg`, 1200 x 630) | A card in the site's own style: the shop sign, address and "Book a chair online". No photo. | Nothing required. Optionally remake it around a photo of the real shopfront. When the shop gets its own domain, change `site` in `astro.config.mjs` or previews will stop finding the image. |
+| Link preview image | The card shown when the link is shared on WhatsApp, Instagram, Facebook and so on (`public/share.jpg`, 800 x 800) | The same "THE MC" mark as the tab icon. It is square because WhatsApp shows the preview as a small square and crops anything wider. | Nothing required. It should change whenever the tab icon does. When the shop gets its own domain, change `site` in `astro.config.mjs` or previews will stop finding the image. |
 
 ## Prices to confirm
 
