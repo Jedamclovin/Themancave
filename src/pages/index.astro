@@ -4,7 +4,10 @@ import Header from "@/components/shop/Header.astro";
 import Hero from "@/components/shop/Hero.astro";
 import About from "@/components/shop/About.astro";
 import Services from "@/components/shop/Services.astro";
+import Barbers from "@/components/shop/Barbers.astro";
+import Gallery from "@/components/shop/Gallery.astro";
 import Clocks from "@/components/shop/Clocks.astro";
+import Book from "@/components/shop/Book.astro";
 import Reviews from "@/components/shop/Reviews.astro";
 import Follow from "@/components/shop/Follow.astro";
 import Visit from "@/components/shop/Visit.astro";
@@ -17,15 +20,18 @@ const serviceList = services.map((item) => item.name.toLowerCase()).join(", ");
 
 <Layout
 	title={`${shop.name}. Barbers at ${shop.street}, ${shop.town}.`}
-	description={`${shop.name}, barbers at ${shop.street}, ${shop.town} ${shop.postcode}. ${shop.landmark}, open seven days. ${serviceList}. Call ${shop.phone}.`}
+	description={`${shop.name}, barbers at ${shop.street}, ${shop.town} ${shop.postcode}. ${shop.landmark}, open seven days. ${serviceList}. Book online or call ${shop.phone}.`}
 >
 	<Header />
 	<main id="main">
 		<Hero />
 		<About />
 		<Services />
+		<Barbers />
+		<Gallery />
 		<Clocks />
 		<Reviews />
+		<Book />
 		<Follow />
 		<Visit />
 	</main>

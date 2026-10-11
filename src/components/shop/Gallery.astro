@@ -1,0 +1,76 @@
+---
+import { Image, getImage } from "astro:assets";
+import SectionHead from "./SectionHead.astro";
+import { copy, gallery } from "@/data/shop";
+
+// Eight places on a 6 column grid (phones) and a 12 column grid (desktop).
+// Sizes are deliberately uneven, and the grid runs off the right edge of the screen.
+const places = [
+	"col-start-1 col-end-5 row-start-1 row-span-6 lg:col-end-4 lg:row-span-6",
+	"col-start-5 col-end-7 row-start-2 row-span-3 lg:col-start-4 lg:col-end-6 lg:row-start-2 lg:row-span-4",
+	"col-start-5 col-end-7 row-start-5 row-span-3 lg:col-start-6 lg:col-end-9 lg:row-start-1 lg:row-span-5",
+	"col-start-1 col-end-4 row-start-7 row-span-5 lg:col-start-9 lg:col-end-11 lg:row-start-2 lg:row-span-4",
+	"col-start-4 col-end-7 row-start-8 row-span-4 lg:col-start-11 lg:col-end-13 lg:row-start-1 lg:row-span-4",
+	"col-start-1 col-end-4 row-start-12 row-span-4 lg:col-start-4 lg:col-end-6 lg:row-start-6 lg:row-span-4",
+	"col-start-4 col-end-7 row-start-12 row-span-5 lg:col-start-6 lg:col-end-9 lg:row-start-6 lg:row-span-4",
+	"col-start-1 col-end-4 row-start-16 row-span-4 lg:col-start-9 lg:col-end-12 lg:row-start-6 lg:row-span-5",
+];
+const aside = "col-start-4 col-end-7 row-start-17 row-span-2 lg:col-start-1 lg:col-end-4 lg:row-start-7 lg:row-span-2";
+
+// The large version each photo opens to in the lightbox
+const items = await Promise.all(
+	gallery.slice(0, places.length).map(async (photo) => {
+		const width = Math.min(1600, photo.src.width);
+		const full = await getImage({ src: photo.src, width, format: "webp" });
+		return { ...photo, full: full.src, width, height: Math.round((width / photo.src.width) * photo.src.height) };
+	}),
+);
+---
+
+<section id="gallery" class="defer-render bg-paper text-paper-foreground overflow-x-clip pt-24 pb-28 lg:pt-36 lg:pb-44">
+	<SectionHead number="03" title={copy.gallery.title} tone="paper" class="px-5 md:px-10" />
+	<ul
+		data-gallery
+		class="mt-12 grid auto-rows-[15vw] grid-cols-6 gap-2 pl-5 md:pl-10 lg:mt-16 lg:auto-rows-[5.6vw] lg:grid-cols-12 lg:gap-4"
+	>
+		{
+			items.map((photo, i) => (
+				<li class={places[i]}>
+					<a
+						href={photo.full}
+						data-pswp-width={photo.width}
+						data-pswp-height={photo.height}
+						data-cropped="true"
+						aria-label={`${copy.gallery.open}: ${photo.alt}`}
+						class="block size-full -outline-offset-4!"
+					>
+						<Image
+							src={photo.src}
+							alt={photo.alt}
+							widths={[240, 400, 640, 900]}
+							sizes="(min-width: 1024px) 26vw, 62vw"
+							class="size-full object-cover"
+							style={`object-position: ${photo.position}`}
+						/>
+					</a>
+				</li>
+			))
+		}
+		<li class:list={["font-display flex items-center text-3xl leading-[0.9] font-extrabold uppercase lg:items-start lg:text-5xl", aside]}>
+			{copy.gallery.aside}
+		</li>
+	</ul>
+</section>
+
+<script>
+	import PhotoSwipeLightbox from "photoswipe/lightbox";
+	import "photoswipe/style.css";
+
+	// The viewer itself is only downloaded when a photo is first opened
+	const lightbox = new PhotoSwipeLightbox({
+		gallery: "[data-gallery]",
+		children: "a",
+		pswpModule: () => import("photoswipe"),
+	});
+	lightbox.init();
+</script>

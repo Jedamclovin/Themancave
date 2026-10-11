@@ -6,7 +6,7 @@ A real shop. Nothing on the site may be invented. Every fact below has a source;
 
 - Name: The Man Cave
 - Address: 1 High Street, Chelmsford CM1 1BE. Opposite HSBC, in the city centre. (Fresha listing, Facebook page)
-- Phone: 01245 611523. Booking is by phone; there is no online booking. (Fresha listing)
+- Phone: 01245 611523. The shop takes bookings by phone and has no online booking of its own. (Fresha listing)
 - Parking: Waterloo Lane. (Instagram bio)
 - Hours (Instagram bio, matches Fresha):
   - Monday to Wednesday: 9:00 to 17:45
@@ -20,6 +20,15 @@ A real shop. Nothing on the site may be invented. Every fact below has a source;
 - Map position: 51.73465, 0.47366. (OpenStreetMap entry for The Man Cave)
 - Google rating: 4.8 from 324 reviews. (Shown on the shop's Google Maps listing, 11 October 2026. Recheck before launch.)
 - No reviews are quoted on the site. The reviews section shows the rating and links to the Google listing.
+
+## Stand-ins on the site
+
+These are not the shop's and are labelled as stand-ins on the page. Details are in `PHOTOS_NEEDED.md`.
+
+- Prices and times on the board are examples.
+- The two barbers are placeholders.
+- The booking calendar is ChairFill's demo Cal.com page (`chairfill/booknow`).
+- All photos are from Unsplash.
 
 ## To confirm with the shop
 

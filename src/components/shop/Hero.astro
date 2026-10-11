@@ -20,9 +20,18 @@ const [firstLine, ...otherLines] = shop.signLines;
 				>
 					{shop.signPrefix}
 				</span>
+				{/* The spaces are not seen, but they make the name read as separate words */}
+				{" "}
 				<span>{firstLine}</span>
 			</span>
-			{otherLines.map((line) => <span class="block">{line}</span>)}
+			{
+				otherLines.map((line) => (
+					<Fragment>
+						{" "}
+						<span class="block">{line}</span>
+					</Fragment>
+				))
+			}
 		</h1>
 	</div>
 
@@ -49,12 +58,12 @@ const [firstLine, ...otherLines] = shop.signLines;
 				{shop.tagline}
 			</p>
 			<div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
-				<Cta href={shop.phoneHref}>{`${copy.ring} ${shop.phone}`}</Cta>
+				<Cta href="#book">{copy.book}</Cta>
 				<a
-					href="#clocks"
+					href={shop.phoneHref}
 					class="label border-primary hover:text-primary-accent border-b pt-3 pb-2 transition-colors"
 				>
-					{copy.seeHours}
+					{copy.ring} {shop.phone}
 				</a>
 			</div>
 			<p class="label text-muted-foreground mt-10 leading-relaxed">

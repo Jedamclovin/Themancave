@@ -32,12 +32,12 @@ const days = hours.map((row) => ({
 <section id="clocks" class="defer-render bg-card text-card-foreground overflow-x-clip px-5 pt-24 pb-24 md:px-10 lg:pt-36 lg:pb-40">
 	<div class="lg:grid lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8">
 		<div class="lg:col-span-6">
-			<SectionHead number="02" title={copy.clocks.title} />
+			<SectionHead number="04" title={copy.clocks.title} />
 			<p class="text-muted-foreground mt-6 max-w-[30ch] text-lg">{copy.clocks.intro}</p>
 		</div>
 
 		<!-- The large clock: local time, with today's open hours on the rim -->
-		<div class="mt-12 -mr-16 ml-[18%] sm:mr-0 sm:ml-auto sm:w-96 lg:col-start-8 lg:col-end-13 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:-mr-28 lg:ml-0 lg:w-auto">
+		<div class="mx-auto mt-12 w-full max-w-80 sm:mr-0 sm:w-96 sm:max-w-none lg:col-start-8 lg:col-end-13 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:mt-0 lg:w-full">
 			<svg viewBox="0 0 200 200" aria-hidden="true" class="block w-full">
 				<circle cx="100" cy="100" r="99" class="fill-background"></circle>
 				<circle cx="100" cy="100" r="93" class="fill-paper"></circle>
@@ -119,13 +119,12 @@ const days = hours.map((row) => ({
 						<circle cx="100" cy="100" r="6" class="fill-secondary"></circle>
 					</svg>
 					<p class="sm:mt-5">
-						<span class="label group-data-today:text-primary block">
-							{row.day}
-							<span class="hidden group-data-today:inline">, {copy.clocks.today.toLowerCase()}</span>
-						</span>
+						<span class="label group-data-today:text-primary block">{row.day}</span>
 						<span class="font-display mt-1.5 block text-3xl leading-none font-bold whitespace-nowrap tabular-nums lg:text-[min(2.3vw,2.25rem)]">
 							{row.open ? `${row.open} to ${row.close}` : "Closed"}
 						</span>
+						{/* Filled in by the script for the current day only: "Today. Open now" or "Today. Closed" */}
+						<span data-day-status class="label text-primary mt-2 block empty:hidden"></span>
 					</p>
 				</li>
 			))
@@ -137,6 +136,9 @@ const days = hours.map((row) => ({
 	is:inline
 	define:vars={{
 		timeZone: shop.timeZone,
+		todayLabel: copy.clocks.today,
+		openLabel: copy.clocks.open,
+		closedLabel: copy.clocks.closed,
 		openNow: copy.clocks.openNow,
 		closedNow: copy.clocks.closedNow,
 		opensAt: copy.clocks.opensAt,
@@ -190,8 +192,14 @@ const days = hours.map((row) => ({
 		}
 
 		const now = h * 60 + m;
+		const isOpen = Boolean(today.open) && now >= minutes(today.open) && now < minutes(today.close);
+		rows.forEach((row, i) => {
+			const badge = row.querySelector("[data-day-status]");
+			const label = i === index ? `${todayLabel}. ${isOpen ? openLabel : closedLabel}` : "";
+			if (badge.textContent !== label) badge.textContent = label;
+		});
 		let text;
-		if (today.open && now >= minutes(today.open) && now < minutes(today.close)) {
+		if (isOpen) {
 			text = `${openNow} ${today.close}.`;
 		} else if (today.open && now < minutes(today.open)) {
 			text = `${closedNow} ${opensAt} ${today.open}.`;

@@ -1,0 +1,129 @@
+---
+// Online booking: a Cal.com calendar set into the page, with the phone number underneath.
+// The calendar is only downloaded when this section comes near the screen.
+import SectionHead from "./SectionHead.astro";
+import { copy, shop } from "@/data/shop";
+---
+
+<section id="book" class="bg-card text-card-foreground scroll-mt-0 overflow-x-clip px-5 pt-24 pb-24 md:px-10 lg:pt-36 lg:pb-40">
+	<div class="lg:grid lg:grid-cols-12 lg:gap-x-8">
+		<div class="lg:col-span-4">
+			<SectionHead number="06" title={copy.booking.title} />
+			<p class="text-muted-foreground mt-6 max-w-[26ch] text-lg">{copy.booking.intro}</p>
+			<p class="mt-10 hidden lg:block">
+				<span class="label text-primary block">{copy.booking.orRing}</span>
+				<a
+					href={shop.phoneHref}
+					class="font-display hover:text-primary-accent mt-2 inline-block text-6xl leading-none font-black tabular-nums transition-colors xl:text-7xl"
+				>
+					{shop.phone}
+				</a>
+			</p>
+		</div>
+
+		<div class="mt-12 lg:col-start-5 lg:col-end-13 lg:mt-10">
+			{shop.draft && <p class="label text-primary mb-4">{copy.booking.demoNote}</p>}
+			<div class="border-primary border-2 p-1.5">
+				<div
+					id="cal-embed"
+					data-cal-link={shop.calLink}
+					class="bg-background min-h-[34rem] w-full"
+				>
+					<p class="label text-muted-foreground p-6">{copy.booking.loading}</p>
+				</div>
+			</div>
+			<p class="mt-8 lg:hidden">
+				<span class="label text-primary block">{copy.booking.orRing}</span>
+				<a
+					href={shop.phoneHref}
+					class="font-display hover:text-primary-accent mt-2 inline-block text-6xl leading-none font-black tabular-nums transition-colors"
+				>
+					{shop.phone}
+				</a>
+			</p>
+		</div>
+	</div>
+</section>
+
+<script is:inline>
+	// Loads the Cal.com calendar when the booking section is about to come into view,
+	// in the dark theme with the site's accent colour.
+	(() => {
+		const holder = document.getElementById("cal-embed");
+		if (!holder || !holder.dataset.calLink) return;
+
+		function load() {
+			const accent = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim();
+			(function (C, A, L) {
+				let p = function (a, ar) {
+					a.q.push(ar);
+				};
+				let d = C.document;
+				C.Cal =
+					C.Cal ||
+					function () {
+						let cal = C.Cal;
+						let ar = arguments;
+						if (!cal.loaded) {
+							cal.ns = {};
+							cal.q = cal.q || [];
+							d.head.appendChild(d.createElement("script")).src = A;
+							cal.loaded = true;
+						}
+						if (ar[0] === L) {
+							const api = function () {
+								p(api, arguments);
+							};
+							const namespace = ar[1];
+							api.q = api.q || [];
+							if (typeof namespace === "string") {
+								cal.ns[namespace] = cal.ns[namespace] || api;
+								p(cal.ns[namespace], ar);
+								p(cal, ["initNamespace", namespace]);
+							} else p(cal, ar);
+							return;
+						}
+						p(cal, ar);
+					};
+			})(window, "https://app.cal.com/embed/embed.js", "init");
+
+			holder.textContent = "";
+			Cal("init", "booking", { origin: "https://app.cal.com" });
+			Cal.ns.booking("inline", {
+				elementOrSelector: "#cal-embed",
+				config: { layout: "month_view", theme: "dark" },
+				calLink: holder.dataset.calLink,
+			});
+			Cal.ns.booking("ui", {
+				theme: "dark",
+				cssVarsPerTheme: { light: { "cal-brand": accent }, dark: { "cal-brand": accent } },
+				hideEventTypeDetails: true,
+				layout: "month_view",
+			});
+		}
+
+		let loaded = false;
+		const start = () => {
+			if (loaded) return;
+			loaded = true;
+			load();
+		};
+		if ("IntersectionObserver" in window) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					if (entries.some((entry) => entry.isIntersecting)) {
+						observer.disconnect();
+						start();
+					}
+				},
+				{ rootMargin: "800px 0px" },
+			);
+			observer.observe(holder);
+		} else {
+			start();
+		}
+		// Someone who taps a Book button should not wait for the scroll to finish
+		addEventListener("hashchange", () => location.hash === "#book" && start());
+		if (location.hash === "#book") start();
+	})();
+</script>

@@ -8,7 +8,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(shop.mapQuery
 ---
 
 <section id="visit" class="defer-render overflow-x-clip px-5 pt-24 pb-24 md:px-10 lg:pt-40 lg:pb-40">
-	<SectionHead number="04" title={copy.visit.title} />
+	<SectionHead number="07" title={copy.visit.title} />
 
 	<div class="mt-14 lg:mt-20 lg:grid lg:grid-cols-12 lg:gap-x-8">
 		<div class="relative z-10 lg:col-start-1 lg:col-end-6">
@@ -26,9 +26,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(shop.mapQuery
 				<span class="block">{shop.parking}</span>
 			</p>
 
-			<h3 class="mt-14 text-5xl md:text-6xl">{copy.visit.bookTitle}</h3>
-			<p class="text-muted-foreground mt-4 max-w-[36ch] text-lg">{copy.visit.bookText}</p>
-			<div class="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
+			<div class="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
 				<Cta href={shop.phoneHref}>{`${copy.ring} ${shop.phone}`}</Cta>
 				<a
 					href={shop.directions}

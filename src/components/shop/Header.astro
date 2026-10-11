@@ -4,6 +4,7 @@ import { copy, shop } from "@/data/shop";
 
 const links = [
 	{ href: "#board", label: copy.nav.board },
+	{ href: "#barbers", label: copy.nav.chairs },
 	{ href: "#clocks", label: copy.nav.clocks },
 	{ href: "#visit", label: copy.nav.visit },
 ];
@@ -24,7 +25,7 @@ const links = [
 					))
 				}
 			</ul>
-			<Cta href={shop.phoneHref} class="hidden h-11 px-5 md:inline-flex">{`${copy.ring} ${shop.phone}`}</Cta>
+			<Cta href="#book" class="hidden h-11 px-5 md:inline-flex">{copy.book}</Cta>
 			<span class="label text-primary-accent md:hidden">{shop.street}</span>
 		</nav>
 	</div>
