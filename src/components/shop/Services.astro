@@ -28,12 +28,12 @@ const insets = ["", "lg:pl-[7%]", "lg:pl-[3%]", "lg:pl-[11%]"];
 							]}
 						>
 							<span class="label text-secondary w-7 shrink-0 pb-1">{String(i + 1).padStart(2, "0")}</span>
-							<span class="font-display flex-1 text-[clamp(2.75rem,11.5vw,7.5rem)] leading-[0.84] font-black uppercase">
+							<span class="font-display flex-1 text-[clamp(2.75rem,11.5vw,7.5rem)] leading-none font-black uppercase">
 								{item.name}
 							</span>
 							{item.price !== undefined && (
 								<span class="shrink-0 text-right">
-									<span class="font-display text-secondary block text-[clamp(2.75rem,9vw,6rem)] leading-[0.84] font-black tabular-nums">
+									<span class="font-display text-secondary block text-[clamp(2.75rem,9vw,6rem)] leading-none font-black tabular-nums">
 										£{item.price}
 									</span>
 									{item.minutes && <span class="label text-paper-muted mt-2 block">{item.minutes} min</span>}
@@ -48,7 +48,7 @@ const insets = ["", "lg:pl-[7%]", "lg:pl-[3%]", "lg:pl-[11%]"];
 			<div
 				class="bg-secondary text-secondary-foreground mt-12 mr-1 ml-6 -rotate-2 px-6 py-6 md:ml-[42%] md:px-8 md:py-7"
 			>
-				<p class="font-display text-4xl leading-[0.9] font-black uppercase md:text-5xl">{copy.board.noticeLabel}</p>
+				<p class="font-display text-4xl leading-none font-black uppercase md:text-5xl">{copy.board.noticeLabel}</p>
 				<Cta href="#book" class="mt-5">{copy.book}</Cta>
 			</div>
 		</div>

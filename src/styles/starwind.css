@@ -179,7 +179,7 @@
   h4,
   h5,
   h6 {
-    @apply font-display leading-[0.86] font-extrabold tracking-normal text-balance uppercase;
+    @apply font-display leading-none font-extrabold tracking-normal text-balance uppercase;
   }
   button {
     @apply cursor-pointer;
