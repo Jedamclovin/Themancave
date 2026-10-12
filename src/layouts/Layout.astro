@@ -70,5 +70,16 @@ const business = {
 			Skip to content
 		</a>
 		<slot />
+		<script>
+			// Smooth scrolling and scroll reveals. Fetched once the page has loaded and the browser is idle,
+			// so it never slows the first view. Skipped entirely for people who prefer reduced motion.
+			if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+				const start = () => import("@/scripts/motion").then((motion) => motion.startMotion());
+				const whenIdle = () =>
+					"requestIdleCallback" in window ? requestIdleCallback(start, { timeout: 2500 }) : setTimeout(start, 600);
+				if (document.readyState === "complete") whenIdle();
+				else addEventListener("load", whenIdle, { once: true });
+			}
+		</script>
 	</body>
 </html>

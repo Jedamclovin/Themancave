@@ -32,6 +32,8 @@ Spec site for a real barber shop, built from barber-base. The verified facts, op
 
 - Respect `prefers-reduced-motion`.
 - Motion is calm. One wow effect per page max.
+- Smooth scrolling (Lenis) and scroll reveals (GSAP) live in `src/scripts/motion.ts`. It picks elements by where they sit on the page, so new sections need a line added there to ease in. It loads only after the page is idle and never hides anything in the HTML or CSS.
+- Reference copies of GSAP, Lenis, Motion, AOS, Magic UI, shadcn/ui, Preline and daisyUI are in `C:\Users\nners\chairfill\libraries\`. Read them for current APIs before using one. The React-based ones (Magic UI, shadcn/ui, Motion) do not drop straight into this Astro site.
 
 ### Tooling
 
