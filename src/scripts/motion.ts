@@ -23,6 +23,46 @@ const reveals: { selector: string; rise: number }[] = [
 	{ selector: "footer > p.font-display", rise: 28 },
 ];
 
+// The page's one showpiece: as a day's clock on the wall is scrolled to, its hands wind round
+// from twelve to opening time, then the open hours sweep round the rim. Each hand ends on
+// exactly the angle it was given in the HTML.
+function windClock(clock: Element, delay: number) {
+	const hands = clock.querySelectorAll<SVGLineElement>('svg line:not([y1="20"])');
+	hands.forEach((hand, i) => {
+		const set = hand.getAttribute("transform") ?? "";
+		const angle = Number.parseFloat(set.replace("rotate(", ""));
+		if (Number.isNaN(angle)) return;
+		// The minute hand (the second one) goes once more round, so it leads the hour hand home
+		const turn = { deg: 0 };
+		gsap.to(turn, {
+			deg: angle + i * 360,
+			duration: 1.5,
+			delay,
+			ease: "power2.inOut",
+			onStart: () => hand.setAttribute("transform", "rotate(0 100 100)"),
+			onUpdate: () => hand.setAttribute("transform", `rotate(${turn.deg.toFixed(2)} 100 100)`),
+			onComplete: () => hand.setAttribute("transform", set),
+		});
+		hand.setAttribute("transform", "rotate(0 100 100)");
+	});
+
+	const rim = clock.querySelector<SVGPathElement>("svg path");
+	if (rim) {
+		const length = rim.getTotalLength();
+		gsap.fromTo(
+			rim,
+			{ strokeDasharray: length, strokeDashoffset: length },
+			{
+				strokeDashoffset: 0,
+				duration: 1,
+				delay: delay + 0.95,
+				ease: "power2.out",
+				clearProps: "strokeDasharray,strokeDashoffset",
+			},
+		);
+	}
+}
+
 export function startMotion() {
 	// Smooth scrolling for mouse wheels and trackpads. Touch screens keep their own scrolling.
 	new Lenis({
@@ -67,6 +107,9 @@ export function startMotion() {
 				}
 			}
 			// Things that arrive together follow one another in, a beat apart
+			arriving.forEach((el, i) => {
+				if (el.matches("#clocks ol > li")) windClock(el, i * 0.07);
+			});
 			if (arriving.length) {
 				gsap.to(arriving, {
 					opacity: 1,
